@@ -76,8 +76,8 @@ void GERMLINE::mine( string params )
 			num_sets = (long)ceil((double)ALL_SNPS.currentSize()/(double)MARKER_SET_SIZE);
 			
 			mb.buildMatches();
-			if ( !SILENT ){ cout << "Matches completed ... freeing memory" << endl;
-			cout<<size;
+			if ( !SILENT ){ cerr << "Matches completed ... freeing memory" << endl;
+			cout<<size<<endl;
 	}
 			ALL_SAMPLES.freeMatches();
 			ALL_SAMPLES.freeMarkers();

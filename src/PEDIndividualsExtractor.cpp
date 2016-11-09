@@ -74,7 +74,7 @@ while (getline(stream,line))
 
 
 
-	cout<<"inputs loaded"<<endl;	
+	cerr<<"inputs loaded"<<endl;	
 	individualsP->initialize();
 	stream.clear();
 	

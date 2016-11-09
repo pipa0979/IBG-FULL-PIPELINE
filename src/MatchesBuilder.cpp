@@ -17,11 +17,11 @@ MatchesBuilder::MatchesBuilder( PolymorphicIndividualsExtractor * pie )
 // buildMatches(): builds matches from individuals
 void MatchesBuilder::buildMatches()
 {
-	if ( !SILENT ) cout << "Read Markers" << endl;
+	if ( !SILENT ) cerr << "Read Markers" << endl;
 	ms_start = 0; ms_end = num_sets;
 	readAllMarkers();
 
-	if ( !SILENT ) cout << "Match Markers" << endl;
+	if ( !SILENT ) cerr << "Match Markers" << endl;
 	matchAllMarkers();
 }
 
