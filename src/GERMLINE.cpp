@@ -77,7 +77,7 @@ void GERMLINE::mine( string params )
 			
 			mb.buildMatches();
 			if ( !SILENT ){ cerr << "Matches completed ... freeing memory" << endl;
-			cout<<size<<endl;
+			cerr<<size<<endl;
 	}
 			ALL_SAMPLES.freeMatches();
 			ALL_SAMPLES.freeMarkers();
