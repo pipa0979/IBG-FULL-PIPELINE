@@ -6,6 +6,8 @@
 #include <string>
 #include <cstring>
 #include <vector>
+#include <stdio.h>      /* printf */
+#include <stdlib.h>
 #include "Haps.hpp"
 #include "Compute.hpp"
 #include "ErrorFinderManager.hpp"
@@ -27,6 +29,7 @@ int MAX_ERR_HET = 1;
 int ERR_W=0;
 bool NO_SUFFIX=false;
 bool REDUCE=false;
+bool GERMLINE_OUTPUT = false;
 std::string PEDFILE ="";
 std::string OUTFILE="";
 std::string MAPFILE="";
@@ -35,6 +38,8 @@ std::string HAPFILE = "";
 std::string SAMPLEFILE="";
 std::string GENFILE="";
 
+bool isInteger(std::string s);
+bool isPath(std::string s);
 
 int main(int argc, char* argv[])
 {
@@ -46,7 +51,8 @@ int main(int argc, char* argv[])
 		strcpy(argvcopy[i],argv[i]);
 	}*/
 	std::map <std::string, std::string> grade_list;
-	grade_list["-min_m"] = "NULL";
+	//grade_list["-min_m"] = "NULL";
+	grade_list["-min_cm_initial"] = "NULL";
 	grade_list["-err_hom"] = "NULL";
 	grade_list["-err_het"] = "NULL";
 	grade_list["-from_snp"] = "NULL";
@@ -71,6 +77,7 @@ int main(int argc, char* argv[])
 	grade_list["-hapfile"] = "NULL";
 	grade_list["-genfile"] = "NULL";
 	grade_list["-samplefile"] = "NULL";
+	grade_list["-germline_output"] = "NULL";
 
 	//-mapfile ./src/Test.map  -pedfile ./src/Test.ped -outfile BEAGLE_OUT -bin_out -bits 20 -err_hom 0 -err_het 0 -min_m 3 -homoz  -w_extend -h_extend
 
@@ -90,11 +97,18 @@ int main(int argc, char* argv[])
 		  {
 			  //std::cout<<argv[i]<<std::endl;
 			  glcopy[glcopycount] = new char[strlen(argv[i])+1];	strcpy(glcopy[glcopycount],argv[i]);	glcopycount++;
-			  if( strncmp(argv[i], "-min_m", strlen("-min_m")) == 0)
+			  if( strncmp(argv[i], "-min_cm_initial", strlen("-min_cm_initial")) == 0)
 			  {
 				  i++;
 				  //std::cout<<argv[i]<<std::endl;
-				  glcopy[glcopycount] = new char[strlen(argv[i])+1];	strcpy(glcopy[glcopycount],argv[i]);	glcopycount++;			  }
+				  glcopy[glcopycount] = new char[strlen(argv[i])+1];	strcpy(glcopy[glcopycount],argv[i]);	glcopycount++;
+			  }
+			  else if( strncmp(argv[i], "-germline_output", strlen("-germline_output")) == 0)
+			  {
+				  i++;
+				  //std::cout<<argv[i]<<std::endl;
+				  glcopy[glcopycount] = new char[strlen(argv[i])+1];	strcpy(glcopy[glcopycount],argv[i]);	glcopycount++;
+			  }
 			  else if( strncmp(argv[i], "-err_hom", strlen("-err_hom")) == 0)
 			  {
 				  i++;
@@ -220,7 +234,7 @@ exit(0);
 //	grade_list2["-reduced"] = "NULL";	//never use it, it's replaced by min_snp and min_cm
 //	grade_list2["-ped-file"] = "NULL";
 
-	grade_list2["-min_cm"] = "NULL";
+	grade_list2["-min_cm_final"] = "NULL";
 	grade_list2["-min_snp"] = "NULL";
 	grade_list2["-holdout-ped"] = "NULL";
 	grade_list2["-holdout-map"] = "NULL";
@@ -276,7 +290,7 @@ if (grade_list2.count(argv[i]))
 		(strcmp(argv[i],"-gap")==0) || (strcmp(argv[i],"-ma-snp")==0) || (strcmp(argv[i],"-pct-err-threshold")==0) ||
 		(strcmp(argv[i],"-emp-pie-threshold")==0) || (strcmp(argv[i],"-output-type")==0) || (strcmp(argv[i], "-snpfile") ==0) ||
 		(strcmp(argv[i],"-log-file")==0) || (strcmp(argv[i],"-ma-threshold")==0) ||(strcmp(argv[i],"-empirical-ma-threshold")==0 ) ||
-		(strcmp(argv[i],"-PIE.dist.length")==0) || (strcmp(argv[i],"-count.gap.errors")==0 ) ||  (strcmp(argv[i],"-min_cm")==0  ) ||
+		(strcmp(argv[i],"-PIE.dist.length")==0) || (strcmp(argv[i],"-count.gap.errors")==0 ) ||  (strcmp(argv[i],"-min_cm_final")==0  ) ||
 		(strcmp(argv[i],"-min_snp")==0))
 			  {
 				  i++;
@@ -323,11 +337,12 @@ for (int i = 0;	i < fishrcopycount ; i++ )
 string rs_range[2] , map; map = rs_range[0] = rs_range[1] = "";
 string params = glcopy[0];
 string badparam = "";
+string germline_output = "./";
 bool bad_param = false;
 	for(int i=1;i<glcopycount;i++){
 		//std::cout<<glcopy[i]<<std::endl;
 		params += " " + string(glcopy[i]);
-		if( strncmp(glcopy[i], "-min_m", strlen("-min_m")) == 0 && i < glcopycount-1)				MIN_MATCH_LEN = atof(glcopy[++i]);
+		if( strncmp(glcopy[i], "-min_cm_initial", strlen("-min_cm_initial")) == 0 && i < glcopycount-1)				MIN_MATCH_LEN = atof(glcopy[++i]);
 		else if( strncmp(glcopy[i], "-err_hom", strlen("-max_err")) == 0 && i < glcopycount-1)		{ MAX_ERR_HOM = atoi(glcopy[++i]); }
 		else if( strncmp(glcopy[i], "-err_het", strlen("-err_het")) == 0 && i < glcopycount-1)		{ MAX_ERR_HET = atoi(glcopy[++i]); }
 		else if( strncmp(glcopy[i], "-from_snp", strlen("-from_snp")) == 0 && i < glcopycount-1 )	rs_range[0] = glcopy[++i];
@@ -351,6 +366,11 @@ bool bad_param = false;
 		else if( strncmp(glcopy[i], "-w_extend", strlen("-w_extend")) == 0 )					WIN_EXT = true;
 		else if( strncmp(glcopy[i], "-no_suffix", strlen("-no_suffix")) == 0 )                                      NO_SUFFIX = true;
 		else if( strncmp(glcopy[i], "-reduced", strlen("-reduced")) == 0 )                                      REDUCE = true;
+		else if ( strncmp(glcopy[i], "-germline_output", strlen("-germline_output")) == 0 )
+		{
+			GERMLINE_OUTPUT = true;
+			germline_output = glcopy[++i];
+		}
 
 		else if (strncmp(glcopy[i], "-hapfile", strlen("-hapfile")) == 0)			HAPFILE = glcopy[++i];
 		else if (strncmp(glcopy[i], "-genfile", strlen("-genfile")) == 0)			GENFILE = glcopy[++i];
@@ -448,7 +468,7 @@ if (OUTFILE == "")
 
 	if(MIN_MATCH_LEN < 0)
 	{
-		cerr << "-min_m must be non-negative" << endl << endl;
+		cerr << "-min_cm_initial must be non-negative" << endl << endl;
 		bad_param = true;
 	} else if(MAX_ERR_HOM < 0 || MAX_ERR_HET < 0 )
 	{
@@ -471,7 +491,7 @@ if (OUTFILE == "")
 		<< "flags:" << endl
 		<< '\t' << "-silent" << '\t' << "Suppress all output except for warnings and prompts." << endl
 		<< '\t' << "-bin_out" << '\t' << "Output in binary format to save space." << endl
-		<< '\t' << "-min_m" << '\t' << "Minimum length for match to be used for imputation (in cM or MB)." << endl
+		<< '\t' << "-min_cm_initial" << '\t' << "Minimum length for match to be used for imputation (in cM or MB)." << endl
 		<< '\t' << "-err_hom" << '\t' << "Maximum number of mismatching homozygous markers (per slice)." << endl
 		<< '\t' << "-err_het" << '\t' << "Maximum number of mismatching heterozygous markers (per slice)." << endl
 		<< '\t' << "-from_snp" << '\t' << "Start SNP (rsID)." << endl
@@ -594,8 +614,101 @@ if (OUTFILE == "")
     }
     delete [] fishrcopy;
 
+    if (GERMLINE_OUTPUT == false)
+		{
+    		string delfile = PEDFILE.substr(0,PEDFILE.find_last_of('.'));
+
+
+    		for (int i = 0 ; i <4; i ++)
+    		{
+
+    			if (i==0)
+    			{
+    				delfile = PEDFILE.substr(0,PEDFILE.find_last_of('.'));
+    				delfile+=".bsid";
+    			}
+    			else if (i==1)
+				{
+					delfile = PEDFILE.substr(0,PEDFILE.find_last_of('.'));
+					delfile+=".bmid";
+				}
+    			else if (i==2)
+				{
+					delfile = PEDFILE.substr(0,PEDFILE.find_last_of('.'));
+					delfile+=".bmatch";
+				}
+    			else if (i==3)
+				{
+					delfile = PEDFILE.substr(0,PEDFILE.find_last_of('.'));
+					delfile+=".log";
+				}
+
+
+    				if( remove( delfile.c_str())!=0)
+					{
+						cerr<< "Error deleting file" <<endl;
+						cerr<<delfile<<endl;
+					}
+    		}
+
+		}
+
+    else//if true
+		{
+    		if (germline_output.length() < 3)//No path provided
+    		{
+
+    		}
+
+    		else
+    		{
+    			string makedir="";
+    			makedir = "mkdir -p " + germline_output;
+    			system(makedir.c_str());
+
+    			string movedir="";
+    			for (int i = 0 ; i <4; i ++)
+    			    {
+
+    					if (i == 0)
+    						movedir = "mv "+ PEDFILE.substr(0,PEDFILE.find_last_of('.')) + ".bmid "+ germline_output;
+    					else if(i == 1)
+							movedir = "mv "+ PEDFILE.substr(0,PEDFILE.find_last_of('.')) + ".bsid  "+ germline_output;
+    					else if(i == 2)
+							movedir = "mv "+ PEDFILE.substr(0,PEDFILE.find_last_of('.')) + ".bmatch " + germline_output;
+    					else if(i == 3)
+							movedir = "mv "+ PEDFILE.substr(0,PEDFILE.find_last_of('.')) + ".log " + germline_output;
+    					else
+    					{
+
+    					}
+    					system(movedir.c_str());
+    			    }
+    		}
+		}
+
    return 0;	//Piyush Debug
 }
 
+bool isPath(const std::string s)
+{
+	if ((s.find('.')==0)   &&  (s.find('/')==1))
+		return true;
+	else
+		return false;
+}
+
+
+
+bool isInteger(const std::string s)
+{
+   if(s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+')))
+	   return false ;
+
+   char * p ;
+   strtol(s.c_str(), &p, 10) ;
+
+   return (*p == 0) ;
+}
 
 // end GERMLINE_0001.cpp
