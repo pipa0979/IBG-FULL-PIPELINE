@@ -15,11 +15,11 @@ Note:
 -  Can be used with .hap, .sample,.gen files as well as .ped and .map files.
 
 Known Issues:
-- 1. Boost libraries missing:
-FIX: sudo apt-get install libboost-all-dev
+- Boost libraries missing:
+FIX: sudo apt-get install libboost-all-dev.
 Use the commmand above to install boost in your Unix/mac system.
 
-- 2   If thre's a problem installing boost, there is a binary  file called 'FISHR2' already included. You needn't compile it. You can just start using it. <Sample Below>
+- If thre's a problem installing boost, there is a binary  file called 'FISHR2' already included. You needn't compile it. You can just start using it. See the Samples Below.
 
 
 Extra/New features:
