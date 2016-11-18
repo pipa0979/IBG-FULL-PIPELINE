@@ -19,7 +19,7 @@ Known Issues:
 FIX: sudo apt-get install libboost-all-dev
 Use the commmand above to install boost in your Unix/mac system.
 
--2   If thre's a problem installing boost, there is a binary  file called 'FISHR2' already included. You needn't compile it. You can just start using it. <Sample Below>
+- 2   If thre's a problem installing boost, there is a binary  file called 'FISHR2' already included. You needn't compile it. You can just start using it. <Sample Below>
 
 
 Extra/New features:
