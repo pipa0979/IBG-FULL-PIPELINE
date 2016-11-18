@@ -2,7 +2,7 @@
 ****************************************************
 FISHR LOG FILE INFORMATION
 
-Program working directory was: /home/piyush/Documents/test5/IBG-FULL-PIPELINE 
+Program working directory was: /home/piyush/Documents/IBG-FISHR-GITHUB/IBG-FULLPIPELINE/IBG-FULL-PIPELINE 
 Program version was: ./FISHR2 
 Program options:
 -bmatch file: ./src/Beagle.Phased.Group2.1k.bmatch 
@@ -39,4 +39,4 @@ No of matches removed due to percentage error: 0
 Total number of SH that were not dropped is: 66
 
 
- The program started at: Thu Nov 17 22:30:20 2016         The program ended at: Thu Nov 17 22:30:20 2016           Total time ( in seconds): 0
+ The program started at: Thu Nov 17 23:33:19 2016         The program ended at: Thu Nov 17 23:33:19 2016           Total time ( in seconds): 0

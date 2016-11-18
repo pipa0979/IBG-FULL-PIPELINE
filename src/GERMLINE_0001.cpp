@@ -461,7 +461,7 @@ if (OUTFILE == "")
 	{
 
 		OUTFILE =  PEDFILE.substr(0,PEDFILE.find_last_of("."));
-		std::cout<<OUTFILE<<std::endl;
+		//std::cout<<OUTFILE<<std::endl;
 		//exit(0);
 	}
 
