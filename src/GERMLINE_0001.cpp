@@ -80,6 +80,76 @@ int main(int argc, char* argv[])
 	grade_list["-germline_output"] = "NULL";
 
 	//-mapfile ./src/Test.map  -pedfile ./src/Test.ped -outfile BEAGLE_OUT -bin_out -bits 20 -err_hom 0 -err_het 0 -min_m 3 -homoz  -w_extend -h_extend
+	std::map <std::string, std::string> grade_list2;
+	grade_list2["-extendSNP"] = "NULL";
+//	grade_list2["-bmatch"] = "NULL";
+//	grade_list2["-bmid"] = "NULL";
+//	grade_list2["-bsid"] = "NULL";
+//	grade_list2["-reduced"] = "NULL";	//never use it, it's replaced by min_snp and min_cm
+//	grade_list2["-ped-file"] = "NULL";
+	grade_list2["-min_cm_final"] = "NULL";
+	grade_list2["-min_snp"] = "NULL";
+	grade_list2["-holdout-ped"] = "NULL";
+	grade_list2["-holdout-map"] = "NULL";
+	grade_list2["-window"] = "NULL";
+	grade_list2["-holdout-threshold"] = "NULL";
+	grade_list2["-trueCM"] = "NULL";
+	grade_list2["-trueSNP"] = "NULL";
+	grade_list2["-holdout-missing"] = "NULL";
+	grade_list2["-gap"] = "NULL";
+	grade_list2["-ma-snp"] = "NULL";
+	grade_list2["-pct-err-threshold"] = "NULL";
+	grade_list2["-emp-pie-threshold"] = "NULL";
+	grade_list2["-output-type"] = "NULL";
+	grade_list2["-snpfile"] = "NULL";
+	grade_list2["-log-file"] = "NULL";
+	grade_list2["-ma-threshold"] = "NULL";
+	grade_list2["-empirical-ma-threshold"] = "NULL";
+	grade_list2["-PIE.dist.length"] = "NULL";
+	grade_list2["-count.gap.errors"] = "NULL";
+
+	std::vector<std::string> flagPool;
+	for(map<std::string, std::string>::iterator it = grade_list.begin(); it != grade_list.end(); ++it) {
+		flagPool.push_back(it->first);
+		//std::cout<<it->first<<endl;
+	}
+	for(map<std::string, std::string>::iterator it = grade_list2.begin(); it != grade_list2.end(); ++it) {
+		flagPool.push_back(it->first);
+		//std::cout<<it->first<<endl;
+	}
+
+
+	for (size_t i = 0 ; i < argc  ; i++){
+		string temp = argv[i];
+		if (temp[0] != '-')
+			 continue;
+
+
+		bool flag = false;
+		for (size_t j = 0; j < flagPool.size(); j++ )
+			{
+				//cout<<temp<<"\t"<<flagPool[j]<<endl;
+				if (flagPool[j] == argv[i])
+				{
+					flag = true;
+					break;
+				}
+
+			}
+		if (flag == false)
+		{
+
+			cerr<<"ERROR: Wrong flag. "<<argv[i]<<endl;
+			exit(0);
+		}
+	}
+
+
+	//exit(0);
+
+
+
+
 
 	char** glcopy = new char*[argc];
 	int glcopycount = 0;
@@ -226,7 +296,7 @@ exit(0);
 	-reduced 64 3 -window 50 -gap 100 	-output-type finalOutput -count.gap.errors TRUE -emp-pie-threshold 0.015 -ma-threshold 0.2 -log-file logs
 */
 
-	std::map <std::string, std::string> grade_list2;
+/*	std::map <std::string, std::string> grade_list2;
 	grade_list2["-extendSNP"] = "NULL";
 //	grade_list2["-bmatch"] = "NULL";
 //	grade_list2["-bmid"] = "NULL";
@@ -253,7 +323,7 @@ exit(0);
 	grade_list2["-ma-threshold"] = "NULL";
 	grade_list2["-empirical-ma-threshold"] = "NULL";
 	grade_list2["-PIE.dist.length"] = "NULL";
-	grade_list2["-count.gap.errors"] = "NULL";
+	grade_list2["-count.gap.errors"] = "NULL";*/
 
 
 	char** fishrcopy = new char*[argc];
