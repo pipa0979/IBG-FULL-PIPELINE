@@ -508,7 +508,7 @@ bool bad_param = false;
 	{
 		if (HAPFILE == "" || GENFILE == ""	 || SAMPLEFILE == "" || PEDFILE!= "" || MAPFILE!="" )
 		{
-			std::cout<<" If providing input file in .hap format, must include .hap, .gen and .sample file. If providing .ped file, must also include .map file .Program exiting"<<std::endl;
+			std::cerr<<" If providing input file in .hap format, must include .hap, .gen and .sample file. If providing .ped file, must also include .map file .Program exiting"<<std::endl;
 			exit(0);
 		}
 
@@ -524,7 +524,7 @@ bool bad_param = false;
 
 	if (HAPFILE == "" && GENFILE == ""	 && SAMPLEFILE == "" && PEDFILE== "" && MAPFILE=="" )
 	{
-		std::cout<<"No Input file provided.. Exiting"<<std::endl;
+		std::cerr<<"No Input file provided.. Exiting"<<std::endl;
 		exit(0);
 	}
 if (OUTFILE == "")
