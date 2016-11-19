@@ -126,6 +126,11 @@ int main(int argc, char* argv[])
 
 	for (size_t i = 0 ; i < argc  ; i++){
 		string temp = argv[i];
+		if (argc == 1)
+		{
+			cerr<<"Error: No inputs provided. Exiting"<<endl;
+			exit(0);
+		}
 		if( strcmp(argv[i], "-help") == 0 )
 		{
 			help = true;
