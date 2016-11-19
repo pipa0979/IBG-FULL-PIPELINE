@@ -6,7 +6,9 @@ This is the newest version of FISHR which detects IBD segments between individua
 
 This is the newest version of the FISHR (Find IBD Shared Haplotypes Rapidly) program. Major changes from V1:
 1) Can be used with -hapfile, -sample file, -genfile
-2) 
+2) Always reduced
+3) no outfile or bin_out
+4) use "./FISHR2 -help" command to view the list of flags and their usuage. 
 
 To Download:
 - 1. In your terminal write  

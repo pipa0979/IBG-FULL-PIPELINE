@@ -40,6 +40,7 @@ std::string GENFILE="";
 
 bool isInteger(std::string s);
 bool isPath(std::string s);
+void helpShowParameters();
 
 int main(int argc, char* argv[])
 {
@@ -52,6 +53,7 @@ int main(int argc, char* argv[])
 	}*/
 	std::map <std::string, std::string> grade_list;
 	//grade_list["-min_m"] = "NULL";
+
 	grade_list["-min_cm_initial"] = "NULL";
 	grade_list["-err_hom"] = "NULL";
 	grade_list["-err_het"] = "NULL";
@@ -107,6 +109,8 @@ int main(int argc, char* argv[])
 	grade_list2["-empirical-ma-threshold"] = "NULL";
 	grade_list2["-PIE.dist.length"] = "NULL";
 	grade_list2["-count.gap.errors"] = "NULL";
+	bool help = false;
+	bool bad_param = false;
 
 	std::vector<std::string> flagPool;
 	for(map<std::string, std::string>::iterator it = grade_list.begin(); it != grade_list.end(); ++it) {
@@ -119,8 +123,17 @@ int main(int argc, char* argv[])
 	}
 
 
+
 	for (size_t i = 0 ; i < argc  ; i++){
 		string temp = argv[i];
+		if( strcmp(argv[i], "-help") == 0 )
+		{
+			help = true;
+			helpShowParameters();
+			//bad_param = true;
+			//continue;
+		}
+
 		if (temp[0] != '-')
 			 continue;
 
@@ -144,25 +157,17 @@ int main(int argc, char* argv[])
 		}
 	}
 
-
-	//exit(0);
-
-
-
-
-
 	char** glcopy = new char*[argc];
 	int glcopycount = 0;
 	for (int i = 0; i < argc ; i++)
 	{
+		//cout<<argv[i]<<endl;
 		//std::cout<<"glcopycount = "<<glcopycount<<std::endl;
 		if (i == 0)
 		{
 			glcopy[i] = new char[strlen(argv[i])+1];	strcpy(glcopy[i],argv[i]);	glcopycount++;
 			continue;
 		}
-
-
 		  if (grade_list.count(argv[i]))
 		  {
 			  //std::cout<<argv[i]<<std::endl;
@@ -262,6 +267,20 @@ int main(int argc, char* argv[])
 	glcopy[glcopycount ] = new char[strlen("-reduced")+1];
 	strcpy(glcopy[glcopycount],"-reduced");
 	glcopycount++;
+
+/*	for (int i = 0; i < argc ; i++)
+	{
+		if (strcmp(argv[i],"-help")==0)
+		{
+			glcopy[glcopycount ] = new char[strlen("-help")+1];
+			strcpy(glcopy[glcopycount],"-help");
+			glcopycount++;
+		}
+	}*/
+
+
+
+//exit(0);
 
 
 /*
@@ -408,7 +427,7 @@ string rs_range[2] , map; map = rs_range[0] = rs_range[1] = "";
 string params = glcopy[0];
 string badparam = "";
 string germline_output = "./";
-bool bad_param = false;
+
 	for(int i=1;i<glcopycount;i++){
 		//std::cout<<glcopy[i]<<std::endl;
 		params += " " + string(glcopy[i]);
@@ -552,13 +571,18 @@ if (OUTFILE == "")
 
 	if(bad_param)
 	{    
+		if (!help)
+		{
+
 		cerr << badparam<<endl 
                <<" above options which you have provided are not allowed"<<endl
                       << "usage: " << glcopy[0]
                 << " -pedfile [ped file ] -mapfile [map file ]"
                 << " -outfile [ out file ]"<<endl
-                << "<flags (optional)>" << endl
-		<< "flags:" << endl
+                << "<flags (optional)>" << endl;
+		}
+
+		cerr<< "flags:" << endl
 		<< '\t' << "-silent" << '\t' << "Suppress all output except for warnings and prompts." << endl
 		<< '\t' << "-bin_out" << '\t' << "Output in binary format to save space." << endl
 		<< '\t' << "-min_cm_initial" << '\t' << "Minimum length for match to be used for imputation (in cM or MB)." << endl
@@ -571,7 +595,7 @@ if (OUTFILE == "")
 		<< '\t' << "-bits" << '\t' << "Slice size." << endl
 		<< '\t' << "-homoz" << '\t' << "Allow self matches (homozygosity)" << endl
 		<< '\t' << "-homoz-only" << '\t' << "Look for autozygous/homozygous segments only, does not detect IBD" << endl
-		<< '\t' << "-haploid" << '\t' << "Treat input individual as two fully phased chromosomes with no recombination\n\t\toutput IDs with 0/1 suffix for chromosome destinction" << endl
+		<< '\t' << "-haploid" << '\t' << "Treat input individual as two fully phased chromosomes with no recombination\n\toutput IDs with 0/1 suffix for chromosome destinction" << endl
 		<< '\t' << "-h_extend" << '\t' << "Extend from seeds if *haplotypes* match" << endl
 		<< '\t' << "-w_extend" << '\t' << "Extend, one marker at a time, beyong the boundaries of a found match" << endl
 		<< '\t' << "-reduced" << '\t' << "output only reduced elements" << endl
@@ -779,6 +803,59 @@ bool isInteger(const std::string s)
    strtol(s.c_str(), &p, 10) ;
 
    return (*p == 0) ;
+}
+
+
+void helpShowParameters()
+{
+	cerr<< "flags:" << endl
+			<< " -pedfile [ped file ]" << endl
+			<< " -mapfile [map file ]" << endl
+			<< " -outfile [ out file ]"<<endl
+			<< " -genfile [ gen file ]"<<endl
+			<< " -samplefile [ sample file ]"<<endl
+			<< " -hapfile [ hap file ]"<<endl
+			<< '\t' << "-silent" << '\t' << "Suppress all output except for warnings and prompts." << endl
+			<< '\t' << "-bin_out" << '\t' << "Output in binary format to save space." << endl
+			<< '\t' << "-min_cm_initial" << '\t' << "Minimum length for match to be used for imputation (in cM or MB)." << endl
+			<< '\t' << "-err_hom" << '\t' << "Maximum number of mismatching homozygous markers (per slice)." << endl
+			<< '\t' << "-err_het" << '\t' << "Maximum number of mismatching heterozygous markers (per slice)." << endl
+			<< '\t' << "-from_snp" << '\t' << "Start SNP (rsID)." << endl
+			<< '\t' << "-to_snp" << '\t' << "End SNP (rsID)." << endl
+			<< '\t' << "-haps" << '\t' << "Print the resolved haplotypes in a seperate HAPS file." << endl
+			<< '\t' << "-map" << '\t' << "Genetic distance map." << endl
+			<< '\t' << "-bits" << '\t' << "Slice size." << endl
+			<< '\t' << "-homoz" << '\t' << "Allow self matches (homozygosity)" << endl
+			<< '\t' << "-homoz-only" << '\t' << "Look for autozygous/homozygous segments only, does not detect IBD" << endl
+			<< '\t' << "-haploid" << '\t' << "Treat input individual as two fully phased chromosomes with no recombination\n\t\toutput IDs with 0/1 suffix for chromosome destinction" << endl
+			<< '\t' << "-h_extend" << '\t' << "Extend from seeds if *haplotypes* match" << endl
+			<< '\t' << "-w_extend" << '\t' << "Extend, one marker at a time, beyong the boundaries of a found match" << endl
+			<< '\t' << "-reduced" << '\t' << "output only reduced elements" << endl
+			<< '\t' << "-no_suffix" << '\t' << "use with -hapoloid to outputthe cell with no .0 or .1 suffix" << endl
+			<< '\t' << "--err_w" << '\t' << "use with -wextend to allow error matches like 1,2,3 etc in extending" << endl
+			<<'\t'	<< "-hap"	 <<'\t'	 << "if using hap file, use this flag. usuage: -hap <hapfilename.hap>  Must also supply \".sample\" and \".gen\" file using flags -sample and -gen"<< endl
+			<<'\t'	<< "-sample"	 <<'\t'	 << "if using hap file, use this flag for the corresponding sample file. usuage: -sample <samplefilename.sample>  Must also supply \".hap\" and \".gen\" file using flags -hap and -gen"<< endl
+			<<'\t'	<< "-gen"	 <<'\t'	 << "if using hap file, use this flag to supply the corresponding gen file. usuage: -gen <genfile.gen>  Must also supply \".hap\" and \".sample\" file using flags -hap and -sample"<< endl
+			<<"\n"<<endl
+			<<'\t'<<"-window [window width to calculate moving averages] "<< endl
+			<<'\t'<<"-gap [max gap to consolidate two matches]"<< endl
+			<<'\t'<<"-pct-err-threshold [max percentage of errors in a match after the trim] OR -emp-pie-threshold" << endl
+			<<'\t'<<"-ma-threshold [specifies percentile to be drawn from trulyIBD data for MA calculations] OR -empirical-ma-threshold"<< endl
+			<<'\t'<<" Note that if both -emp-pie-threshold and empirical-ma-threshold are supplied, then -trueSNP and -trueCM will be ignored"<< endl
+			<<'\t'<<"-output.type [ must provide any of these. it can be "<< endl
+			<<'\t'<<" MovingAverages  or Error1 or Error2 or Error3 or ErrorRandom1 " << endl
+			<<'\t'<<" or ErrorRandom2 or Error3 or ErrorRandom3 or Full "<< endl
+			<<'\t'<<" look at the description about how these works in wiki ]"<< endl
+			<<'\t'<<" (optional) -holdout-ped [new ped file path] -holdout-map [new map file] "<< endl
+			<<'\t'<<"-holdout-threshold [threshold to drop a match with new ped file ]"<< endl
+			<<'\t'<<"-holdout-missing [missing value representation in new ped file] "<< endl
+			<<'\t'<<"-log-file [log file name]"<< endl
+			<<'\t'<<"-trueCM [ true match maximum cm length] " << endl
+			<<'\t'<<"-trueSNP [ true match SNP length]"<< endl
+			<<'\t'<<"-PIE.dist.length [ can be MOL or any cm distance length "<< endl
+			<<'\t'<<" please refer wiki for more details on how to use this option"<< endl
+			<<'\t'<<"-count.gap.errors [ TRUE or FALSE to include gap errors in errors count ]"<< endl;
+	exit(0);
 }
 
 // end GERMLINE_0001.cpp
