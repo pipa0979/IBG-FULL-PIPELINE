@@ -7,7 +7,7 @@
 using namespace std;
 
 ofstream MATCH_FILE;	//bmatch file
-ofstream MATCH_FILE2;	//match file
+//ofstream MATCH_FILE2;	//match file
 
 size_t num_samples;
 unsigned long num_matches;
@@ -47,10 +47,10 @@ void GERMLINE::mine( string params )
 
 	if ( BINARY_OUT ) MATCH_FILE.open( ( out + ".bmatch" ).c_str() , ios::binary );
 	
-	if (IBD)	MATCH_FILE2.open( ( out + ".match" ).c_str() );
+	//if (IBD)	MATCH_FILE2.open( ( out + ".match" ).c_str() );
 
 
-	//else MATCH_FILE.open( ( out + ".match" ).c_str() );
+	else MATCH_FILE.open( ( out + ".match" ).c_str() );
 
 	fout << params << endl;
 	fout << setw(65) << setfill('-') << ' ' << endl << setfill(' ');
@@ -97,7 +97,7 @@ void GERMLINE::mine( string params )
 	fout << setw(50) << "Total runtime (sec): " << difftime( timer[1] , timer[0] ) << endl;
 	fout.close();
 	MATCH_FILE.close();
-	if (IBD) MATCH_FILE.close();
+	//if (IBD) MATCH_FILE2.close();
 
 
 

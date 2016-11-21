@@ -8,7 +8,7 @@
  GERMLINE was coded by Alexander Gusev and collaborators in 
  Itsik Pe'er's Computational Biology Lab at Columbia University
 ---------------------------------------------------------------- 
-./binaries/FISHR2 -germline_output -mapfile -pedfile -bits -err_hom -err_het -min_cm_initial -homoz -w_extend -h_extend -outfile -bin_out -reduced
+./binaries/FISHR2 -mapfile -pedfile -bits -err_hom -err_het -min_cm_initial -homoz -w_extend -h_extend -germline_output -outfile -bin_out -reduced
 ---------------------------------------------------------------- 
 Minimum match length:                             3 cM
 Allowed mismatching bits:                         0 0

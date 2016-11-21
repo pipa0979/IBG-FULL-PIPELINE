@@ -38,6 +38,8 @@ std::string HAPFILE = "";
 std::string SAMPLEFILE="";
 std::string GENFILE="";
 
+double IBD_THRESHOLD = -1.0;
+
 bool isInteger(std::string s);
 bool isPath(std::string s);
 bool IBD = false; // To check if the file is IBD2 or IBD4. Changes done in Match,cpp file to compute .match along with .bmatch
@@ -81,6 +83,7 @@ int main(int argc, char* argv[])
 	grade_list["-genfile"] = "NULL";
 	grade_list["-samplefile"] = "NULL";
 	grade_list["-germline_output"] = "NULL";
+	grade_list["-ibd"] = "NULL";
 
 	//-mapfile ./src/Test.map  -pedfile ./src/Test.ped -outfile BEAGLE_OUT -bin_out -bits 20 -err_hom 0 -err_het 0 -min_m 3 -homoz  -w_extend -h_extend
 	std::map <std::string, std::string> grade_list2;
@@ -140,11 +143,11 @@ int main(int argc, char* argv[])
 			//bad_param = true;
 			//continue;
 		}
-		if( strcmp(argv[i], "-ibd") == 0 )
+/*		if( strcmp(argv[i], "-ibd") == 0 )
 		{
 			IBD = true;
 			continue;
-		}
+		}*/
 
 		if (temp[0] != '-')
 			 continue;
@@ -191,6 +194,12 @@ int main(int argc, char* argv[])
 				  glcopy[glcopycount] = new char[strlen(argv[i])+1];	strcpy(glcopy[glcopycount],argv[i]);	glcopycount++;
 			  }
 			  else if( strncmp(argv[i], "-germline_output", strlen("-germline_output")) == 0)
+			  {
+				  i++;
+				  //std::cout<<argv[i]<<std::endl;
+				  glcopy[glcopycount] = new char[strlen(argv[i])+1];	strcpy(glcopy[glcopycount],argv[i]);	glcopycount++;
+			  }
+			  else if( strncmp(argv[i], "-ibd", strlen("-ibd")) == 0)
 			  {
 				  i++;
 				  //std::cout<<argv[i]<<std::endl;
@@ -472,6 +481,11 @@ string germline_output = "./";
 			GERMLINE_OUTPUT = true;
 			germline_output = glcopy[++i];
 		}
+		else if ( strncmp(glcopy[i], "-ibd", strlen("-ibd")) == 0 )
+		{
+			IBD = true;
+			IBD_THRESHOLD = atof(glcopy[++i]);
+		}
 
 		else if (strncmp(glcopy[i], "-hapfile", strlen("-hapfile")) == 0)			HAPFILE = glcopy[++i];
 		else if (strncmp(glcopy[i], "-genfile", strlen("-genfile")) == 0)			GENFILE = glcopy[++i];
@@ -484,7 +498,11 @@ string germline_output = "./";
 
                 }
 	}
-
+if (IBD && (IBD_THRESHOLD == -1.0))
+{
+	bad_param = true;
+	std::cerr<<"-ibd <value>";
+}
 	//BINARY_OUT = true;	//Should always be true
 
 
@@ -593,8 +611,8 @@ if (OUTFILE == "")
                 << " -outfile [ out file ]"<<endl
                 << "<flags (optional)>" << endl;
 		}
-
-		cerr<< "flags:" << endl
+		helpShowParameters();
+		/*cerr<< "flags:" << endl
 		<< '\t' << "-silent" << '\t' << "Suppress all output except for warnings and prompts." << endl
 		<< '\t' << "-bin_out" << '\t' << "Output in binary format to save space." << endl
 		<< '\t' << "-min_cm_initial" << '\t' << "Minimum length for match to be used for imputation (in cM or MB)." << endl
@@ -616,6 +634,7 @@ if (OUTFILE == "")
 		<<'\t'	<< "-hap"	 <<'\t'	 << "if using hap file, use this flag. usuage: -hap <hapfilename.hap>  Must also supply \".sample\" and \".gen\" file using flags -sample and -gen"<< endl
 		<<'\t'	<< "-sample"	 <<'\t'	 << "if using hap file, use this flag for the corresponding sample file. usuage: -sample <samplefilename.sample>  Must also supply \".hap\" and \".gen\" file using flags -hap and -gen"<< endl
 		<<'\t'	<< "-gen"	 <<'\t'	 << "if using hap file, use this flag to supply the corresponding gen file. usuage: -gen <genfile.gen>  Must also supply \".hap\" and \".sample\" file using flags -hap and -sample"<< endl;
+		*/
 		return 0;
 	}
 	if( rs_range[0] != "" && rs_range[1] != "" )
@@ -773,7 +792,7 @@ if (OUTFILE == "")
     			system(makedir.c_str());
 
     			string movedir="";
-    			for (int i = 0 ; i <5; i ++)
+    			for (int i = 0 ; i <4; i ++)
     			    {
 
     					if (i == 0)
@@ -784,8 +803,8 @@ if (OUTFILE == "")
 							movedir = "mv "+ PEDFILE.substr(0,PEDFILE.find_last_of('.')) + ".bmatch " + germline_output;
     					else if(i == 3)
 							movedir = "mv "+ PEDFILE.substr(0,PEDFILE.find_last_of('.')) + ".log " + germline_output;
-    					else if ((i == 4) && IBD	)
-    						movedir = "mv "+ PEDFILE.substr(0,PEDFILE.find_last_of('.')) + ".match " + germline_output;
+    					/*else if ((i == 4) && IBD	)
+    						movedir = "mv "+ PEDFILE.substr(0,PEDFILE.find_last_of('.')) + ".match " + germline_output;*/
     					else
     					{}
 
@@ -868,7 +887,7 @@ void helpShowParameters()
 			<<'\t'<<"-PIE.dist.length [ can be MOL or any cm distance length "<< endl
 			<<'\t'<<" please refer wiki for more details on how to use this option"<< endl
 			<<'\t'<<"-count.gap.errors [ TRUE or FALSE to include gap errors in errors count ]"<< endl
-			<<'\t'<<"-ibd" <<"\t compute ibd2 and ibd4"<< endl;
+			<<'\t'<<"-ibd <threshold value>" <<"\t compute ibd2 and ibd4"<< endl;
 	exit(0);
 }
 

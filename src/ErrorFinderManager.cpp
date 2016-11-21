@@ -8,6 +8,8 @@
 #include <algorithm>
 #include "ErrorFinderManager.hpp"
 #include "ErrorCalculator.hpp"
+#include "BasicDefinitions.h"
+
 
 #define GetCurrentDir getcwd
 
@@ -351,6 +353,13 @@ void ErrorFinderManager::initiateErrorFinder()
         std::cerr<<"Reading bsid file completed"<<std::endl;
         eCalculator.readPedFile(PEDFILE, HO_MISSING);
         std::cerr<<"Reading ped file completed"<<std::endl;
+
+        if(IBD)
+        {
+        	eCalculator.convertPedtovec(PEDFILE);
+        	std::cerr<<"Loading ped file to vector completed"<<std::endl;
+        }
+
         int pers_count=eCalculator.getNoOfPersons();
         consolidator.readMatches(BMATCHFILE, pers_count, eCalculator, TRUESNP, TRUECM, EXTENDSNP,PEDFILE  );
         std::cerr<<"Reading bmatch file completed"<<std::endl;

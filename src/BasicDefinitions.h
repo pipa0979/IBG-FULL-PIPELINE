@@ -35,15 +35,17 @@ extern bool DEBUG;
 extern bool BINARY_OUT;
 extern bool REDUCE;
 extern bool NO_SUFFIX;
+
 class SNPs;
 class Individuals;
 extern SNPs ALL_SNPS;
 extern Individuals ALL_SAMPLES;
 extern ofstream MATCH_FILE; //bmatch filr
-extern ofstream MATCH_FILE2; //match file
+//extern ofstream MATCH_FILE2; //match file
 extern string PEDFILE;
 extern string MAPFILE;
 extern string OUTFILE;
+extern double IBD_THRESHOLD;
 enum ErrorType{RECOMB=0,MI=1};
 const int HET=2;
 const int MIS=9;

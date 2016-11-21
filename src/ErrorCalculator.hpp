@@ -7,9 +7,12 @@
 #include<string>
 #include<vector>
 #include <iostream>
+#include "Ped.hpp"
 /*
 class SNPs;
 class Marker;*/
+
+
 class SNPs_lrf
 {
        public:
@@ -154,12 +157,29 @@ class ErrorCalculator
      int getMaximumBP(){return marker_id[marker_id.size()-1].bp_distance;}
      int getSHBPLength(int snp1, int snp2){return (marker_id[snp2].bp_distance - marker_id[snp1].bp_distance);}
      int getGenomeBPLength(){return (marker_id[marker_id.size()-1].bp_distance - marker_id[0].bp_distance);}
-         private:
-         int pers_count;
+     std::vector <Ped> PED;	//ADDED PED FILE CONVERSION
+
+
+     std::vector<bool> ma_het(int pers1,int pers2,int snp1,int snp2, float min_cm);
+     std::vector<bool> ma_het_nm(int pers1,int pers2,int snp1,int snp2, float min_cm);
+
+     std::string seperateSNP(std::string,int snp1,int snp2,int snp1_or_snp2); // ACGGCCCT to AGCC and CGCT;snp1_or_snp2 implies either odd or even, even or(0) implies AGCC, odd or (1) implies CGCT
+     void convertPedtovec(std::string path);
+     std::vector<Marker>marker_id;
+     std::vector<double> returnhighest(std::string s1,std::string s2,int startIndex, int endIndex);
+
+
+     private:
+
+
+
+     int pers_count;
          std::vector<std::vector<SNPs_lrf > >ped_file;
+
+
          std::vector<std::vector<SNPs_lrf > >hped_file;
 	 std::vector< int > mapper;
-         std::vector<Marker>marker_id;
+
 	 std::vector<Marker>hMarker_id;
          std::vector<std::string>sample_id;
          std::vector<float>max_averages; //new nate 2/3/2014

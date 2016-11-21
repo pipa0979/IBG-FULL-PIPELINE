@@ -304,14 +304,15 @@ void Match::print( ostream& fout )
 
 		}
 	}
-	if (IBD )
+	else
+	//if (IBD )
 	{
 		stringstream ss;
 		string eachline="";
 	
 		if(!REDUCE){	
-			MATCH_FILE2 << node[0]->getID() << '\t';
-			MATCH_FILE2 << node[1]->getID() << '\t';
+			MATCH_FILE << node[0]->getID() << '\t';
+			MATCH_FILE << node[1]->getID() << '\t';
 		}
 		else
 		{
@@ -334,15 +335,15 @@ void Match::print( ostream& fout )
 
 		}
 		if(!REDUCE)
-			MATCH_FILE2 << ALL_SNPS.getSNP(snp_start).getChr() << '\t';
+			MATCH_FILE << ALL_SNPS.getSNP(snp_start).getChr() << '\t';
 
 		
 		ss<<ALL_SNPS.getSNP(snp_start).getPhysPos() << '\t';     //MATCH_FILE2 << ALL_SNPS.getSNP(snp_start).getPhysPos() << ' ';
 		ss<<ALL_SNPS.getSNP(snp_end).getPhysPos() << '\t';	//MATCH_FILE2 << ALL_SNPS.getSNP(snp_end).getPhysPos() << '\t';
 		
 		if(!REDUCE){
-			MATCH_FILE2 << ALL_SNPS.getSNP(snp_start).getSNPID() << ' ';
-			MATCH_FILE2 << ALL_SNPS.getSNP(snp_end).getSNPID() << '\t';
+			MATCH_FILE << ALL_SNPS.getSNP(snp_start).getSNPID() << ' ';
+			MATCH_FILE << ALL_SNPS.getSNP(snp_end).getSNPID() << '\t';
 		}
 		
 		ss<<( snp_end - snp_start + 1) << '\t';	//MATCH_FILE2 << ( snp_end - snp_start + 1) << '\t';
@@ -350,22 +351,22 @@ void Match::print( ostream& fout )
 		ss<<setiosflags(ios::fixed) << setprecision(2) << distance;	//MATCH_FILE2 << setiosflags(ios::fixed) << setprecision(2) << distance;
 
 		if(!REDUCE){
-			MATCH_FILE2<<'\t';
-			if ( genetic ) MATCH_FILE2 << "cM" << '\t'; else MATCH_FILE2 << "MB" << '\t';
+			MATCH_FILE<<'\t';
+			if ( genetic ) MATCH_FILE << "cM" << '\t'; else MATCH_FILE << "MB" << '\t';
 		
-			MATCH_FILE2 << dif;
+			MATCH_FILE << dif;
 			for ( int n = 0 ; n < 2 ; n++ )
-				if ( hom[n] ) MATCH_FILE2 << '\t' << 1; else MATCH_FILE2 << '\t' << 0;
+				if ( hom[n] ) MATCH_FILE << '\t' << 1; else MATCH_FILE << '\t' << 0;
 		}
 		//ss<<endl;	//MATCH_FILE2 << endl;
 		ss>>eachline>>eachline;
-		MATCH_FILE2<<eachline<<'\t';	//person1 2nd col
+		MATCH_FILE<<eachline<<'\t';	//person1 2nd col
 
 		ss>>eachline>>eachline;
-		MATCH_FILE2<<eachline;	//person2 2nd col
+		MATCH_FILE<<eachline;	//person2 2nd col
 
 		getline(ss,eachline);	//get remaining string from stringstream
-		MATCH_FILE2<<eachline<<endl;
+		MATCH_FILE<<eachline<<endl;
 		ss.str("");
 		ss.clear();
 	}

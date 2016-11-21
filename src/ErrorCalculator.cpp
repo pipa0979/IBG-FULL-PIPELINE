@@ -7,10 +7,18 @@
 #include <sstream>
 #include <fstream>
 #include <time.h>
+#include <numeric>
+#include <algorithm>
 #include <assert.h>
+#include <cctype>
+#include <cstring>
+#include <boost/tokenizer.hpp>
 #include "ErrorCalculator.hpp"
 #include "ErrorFinderManager.hpp"
 #include "Consolidator.hpp"
+#include "GERMLINE.h"
+#include "Ped.hpp"
+
 
 //using namespace std;
 void ErrorCalculator::createLogFile( std::string path )
@@ -55,6 +63,9 @@ void ErrorCalculator::readBmidFile(std::string path)
     	 std::cerr<<e.what()<<std::endl;
       exit( -1 );
      }
+
+
+
 
 }
 void ErrorCalculator::changeMapFile( std::string path )
@@ -156,7 +167,7 @@ void ErrorCalculator::readPedFile(std::string path, std::string missing)
         	 std::ifstream file_ped(path.c_str());
                 if( !file_ped )
                 {
-                	std::cerr<< "original ped file cannot be oppened. exiting program" <<std::endl;
+                	std::cerr<< "original ped file cannot be opened. exiting program" <<std::endl;
                      exit( -1 );
                 }
 
@@ -166,33 +177,32 @@ void ErrorCalculator::readPedFile(std::string path, std::string missing)
                 	std::vector<std::string> v;
                 	std::string item;
                 	std::stringstream ss1(line);
-                        while(getline(ss1,item,' '))
-                        {
-                                v.push_back(item);
-                        }
+					while(getline(ss1,item,' '))
+					{
+						v.push_back(item);
+					}
 
                         if(start == 0)
-			{
-                              for(int t = 6; ( t + 1 ) < v.size(); t+=2 )
-                              {
-                                   locator.push_back( v[t][0] );
-                              }
-                              ++start;
-			}
+					{
+						  for(int t = 6; ( t + 1 ) < v.size(); t+=2 )
+							  {
+								   locator.push_back( v[t][0] );
+							  }
+						  ++start;
+					}
                          for(int t = 6, i = 0; ( t + 1 ) < v.size() && i < locator.size(); t+=2, ++i )
-                         {
+							{
                         	 SNPs_lrf s;
-                                if( missing.compare( v[t] )==0 ||missing.compare( v[t+1] )==0 )
-				{
-                                        warn = true;
-					s.SNP1 = 0;
-                                        s.SNP2 = 1;
-				}
-
-                                s.SNP1 = (locator[ i ] == v[t][0] ) ? false : true;
-                                s.SNP2 = ( locator[ i ] == v[t+1][0] ) ? false : true;
-                                ped_file[j].push_back(s);
-                        }
+                        	 if( missing.compare( v[t] )==0 ||missing.compare( v[t+1] )==0 )
+								{
+									warn = true;
+									s.SNP1 = 0;
+									s.SNP2 = 1;
+								}
+							s.SNP1 = (locator[ i ] == v[t][0] ) ? false : true;
+							s.SNP2 = ( locator[ i ] == v[t+1][0] ) ? false : true;
+							ped_file[j].push_back(s);
+							}
                         j++;
                 }
 
@@ -207,6 +217,40 @@ void ErrorCalculator::readPedFile(std::string path, std::string missing)
                  exit( -1 );
          }
 }
+
+void ErrorCalculator::convertPedtovec(std::string path)
+{
+	std::string line;
+	std::string individual;
+	std::string dnaseq;
+	std::stringstream ss;
+	Ped populate;
+
+	std::ifstream file_ped(path.c_str());
+	if (!file_ped.is_open()	)
+	{
+		std::cerr<<"Problem opening Ped file to load..Exiting"<<std::endl;
+		exit(0);
+	}
+
+	while(getline(file_ped,line))
+		{
+			ss<<line;
+			ss>>populate.individual>>populate.individual;
+			individual = populate.individual;
+			ss>>populate.individual>>populate.individual>>populate.individual>>populate.individual;
+			getline(ss,dnaseq,'\n');
+			dnaseq.erase(std::remove_if(dnaseq.begin(), dnaseq.end(), ::isspace), dnaseq.end());
+			//std::cout<<dnaseq<<std::endl;
+			PED.push_back(Ped(individual,dnaseq));
+			ss.str("");
+			ss.clear();
+		}
+	file_ped.close();
+}
+
+
+
 
 //<piyush-- calculate how many number of AGCT seq ar there in the ped file first line>
 /*
@@ -932,7 +976,6 @@ int ErrorCalculator::getMax(int &a,int &b, int &c, int &d)const
         return max;
 
 }
-
 void ErrorCalculator::finalOutPut(int pers1,int pers2,int snp1,int snp2, float min_cm)
 {
 
@@ -956,15 +999,344 @@ void ErrorCalculator::finalOutPut(int pers1,int pers2,int snp1,int snp2, float m
              }
              //Addressing the use of IID instead of FID by stepping up one index in the master sample_id vector. This has been tested, and will be
              //applied to all outputs. It goes from sample_id[pers1*2] --> sample_id[(pers1*2)+1]
-             std::cout<<sample_id[(pers1*2)+1]<<"\t"
-             <<sample_id[(pers2*2)+1]<<"\t"
-             <<marker_id[snp1].bp_distance<<"\t"
-             <<marker_id[snp2].bp_distance<<"\t"
-               <<(snp2-snp1)<<"\t"
-               <<(marker_id[snp2].cm_distance-marker_id[snp1].cm_distance)<<std::endl;
+
+             if (!IBD)
+				 {
+					std::cout<<sample_id[(pers1*2)+1]<<"\t"
+					<<sample_id[(pers2*2)+1]<<"\t"
+					<<marker_id[snp1].bp_distance<<"\t"
+					<<marker_id[snp2].bp_distance<<"\t"
+					<<(snp2-snp1)<<"\t"
+					<<(marker_id[snp2].cm_distance-marker_id[snp1].cm_distance)<<std::endl;
+				 }
+
+             else
+				 {
+					std::cout<<sample_id[(pers1*2)+1]<<"\t"	//pers1 and pers2 relative person id
+					<<sample_id[(pers2*2)+1]<<"\t"
+					<<marker_id[snp1].bp_distance<<"\t"
+					<<marker_id[snp2].bp_distance<<"\t"
+					<<(snp2-snp1)<<"\t"
+					<<(marker_id[snp2].cm_distance-marker_id[snp1].cm_distance)<<"\t";
+
+
+					long SH_L = marker_id[snp1].bp_distance;	//snp1 relative distance i.e. line number of bmid
+					long SH_R = marker_id[snp2].bp_distance;	//snp2 ^^
+					std::vector<bool> status;
+					status = ma_het(pers1, pers2, snp1, snp2,  min_cm);
+
+					if (status[0] && status[1])	// status 1 stands for ibd4
+					{
+						std::cout<<"IBD4"<<std::endl;
+						return;
+						//check for ibd4
+					}
+					if (status[0])
+					{
+						std::cout<<"IBD2"<<std::endl;
+						return;
+					}
+					else
+					{
+						std::cout<<"NA"<<std::endl;
+					}
+
+
+
+
+					// work on this part
+/*					if ((status[0] == false)&&(status[1] == false)	)
+					{
+						//check for ibd2<NM>
+						status.clear();
+						status = ma_het_nm(pers1, pers2, snp1, snp2,  min_cm);
+						if (status[0])
+						{
+							std::cout<<"IBD2"<<std::endl;
+						}
+						else
+						{
+							std::cout<<"NA"<<endl;
+							return;
+						}
+					}*/
+				 }
+}
+
+
+
+std::vector<bool> ErrorCalculator::ma_het_nm(int pers1,int pers2,int snp1,int snp2, float min_cm)	//No NM required. Just send (11,21), (11,22),(12,21),(12,22) to het and test for max of them > threashold
+{
+
+	std::string pers1dnasnp1 = seperateSNP(PED[pers1].dnasequence, 0, PED[pers1].dnasequence.length(),0);
+	std::string pers1dnasnp2 = seperateSNP(PED[pers1].dnasequence, 0, PED[pers1].dnasequence.length(),1);
+	std::string pers2dnasnp1 = seperateSNP(PED[pers2].dnasequence, 0, PED[pers2].dnasequence.length(),0);
+	std::string pers2dnasnp2 = seperateSNP(PED[pers2].dnasequence, 0, PED[pers2].dnasequence.length(),1);
+
+
+
+/*	cerr<<pers1dnasnp1<<endl;
+	cerr<<pers1dnasnp2<<endl;
+	cerr<<pers2dnasnp1<<endl;
+	cerr<<pers2dnasnp2<<endl;*/
+
+	std::vector <double> indices1 = returnhighest(pers1dnasnp1,pers2dnasnp1,snp1,snp2) ;//snpindexBegin, snpindexEnd, maxcount index 0,1,2 respectively
+	std::vector <double> indices2 = returnhighest(pers1dnasnp1,pers2dnasnp2,snp1,snp2); // ^^
+	std::vector <double> indices3 = returnhighest(pers1dnasnp2,pers2dnasnp1,snp1,snp2);
+	std::vector <double> indices4 = returnhighest(pers1dnasnp2,pers2dnasnp2,snp1,snp2);
+
+
+
+	std::vector<bool> status; // 1 value. true means it's ibd2 else it's not ibd2
+	//std::cerr<<indices1[2]<<"\t"<<indices2[2]<<"\t"<<indices3[2]<<"\t"<<indices4[2]<<endl;
+
+	if (	max(max(indices1[2],indices2[2]),max(indices3[2],indices4[2])) >= IBD_THRESHOLD )
+	{
+		status.push_back(true);
+
+	}
+	else
+	{
+		status.push_back(false);
+	}
+
+/*	std::cerr<<indices1[2]<<endl;
+	std::cerr<<indices2[2]<<endl;*/
+return status;
 
 
 }
+
+
+
+std::vector<bool> ErrorCalculator::ma_het(int pers1,int pers2,int snp1,int snp2, float min_cm)	//No NM required. Just send (11,21), (11,22),(12,21),(12,22) to het and test for max of them > threashold
+{
+
+	std::string pers1dnasnp1 = seperateSNP(PED[pers1].dnasequence, 0, PED[pers1].dnasequence.length(),0);
+	std::string pers1dnasnp2 = seperateSNP(PED[pers1].dnasequence, 0, PED[pers1].dnasequence.length(),1);
+	std::string pers2dnasnp1 = seperateSNP(PED[pers2].dnasequence, 0, PED[pers2].dnasequence.length(),0);
+	std::string pers2dnasnp2 = seperateSNP(PED[pers2].dnasequence, 0, PED[pers2].dnasequence.length(),1);
+
+/*	std::cerr<<PED[pers1].dnasequence.length()<<endl;
+	std::cerr<<PED[pers1].dnasequence<<endl;*/
+
+/*	std::cerr<<pers1dnasnp1<<endl;
+	std::cerr<<pers1dnasnp2<<endl;
+	std::cerr<<pers2dnasnp1<<endl;
+	std::cerr<<pers2dnasnp2<<endl;
+
+	std::cerr<<pers1dnasnp1.length()<<endl;
+
+
+	std::cerr<<snp2 - snp1<<endl;*/
+
+/*	std::string temp = "";
+	for (int i = snp1 ; i <=snp2; i++)
+		{
+		temp+=pers1dnasnp1[i];
+			//std::cerr<<pers1dnasnp1[i];
+		}
+	std::cerr<<temp<<endl;
+
+
+	temp = "";
+	for (int i = snp1 ; i <=snp2; i++)
+		{
+			temp+=pers1dnasnp2[i];
+		}
+	std::cerr<<temp<<endl;
+
+	temp = "";
+	for (int i = snp1 ; i <=snp2; i++)
+		{
+		temp+=pers2dnasnp1[i];
+		}
+	std::cerr<<temp<<endl;
+
+	temp = "";
+	for (int i = snp1 ; i <=snp2; i++)
+		{
+		temp+=pers2dnasnp2[i];
+		}
+	std::cerr<<temp<<endl;*/
+
+
+
+
+	std::vector <double> indices1 = returnhighest(pers1dnasnp1,pers1dnasnp2,snp1,snp2) ;//snpindexBegin, snpindexEnd, maxcount index 0,1,2 respectively
+	std::vector <double> indices2 = returnhighest(pers2dnasnp1,pers2dnasnp2,snp1,snp2); // ^^
+
+	std::vector<bool> status; // 2 values. 0 contains information about,  if ibd2 <withoutNM>, is true or false and  1 contains information about ibd4 is true or false
+
+/*	std::cerr<<indices1[2]<<endl;
+	std::cerr<<indices2[2]<<endl;
+	std::cout<<IBD_THRESHOLD<<endl;*/
+
+	if (max(indices1[2],indices2[2]) >= IBD_THRESHOLD )
+	{
+		status.push_back(true);
+		if (min(indices1[2],indices2[2]) >= IBD_THRESHOLD )
+		{
+			status.push_back(true);
+		}
+		else
+		{
+			status.push_back(false);
+		}
+	}
+	else // if ibd2 <withoutNM>, if it ain't ibd2<withoutNM>, then it ain't ibd4
+	{
+		status.push_back(false);
+		status.push_back(false);
+	}
+
+/*	std::cerr<<indices1[2]<<endl;
+	std::cerr<<indices2[2]<<endl;*/
+return status;
+
+
+}
+
+std::string ErrorCalculator::seperateSNP(std::string dnasequence,int zero,int length,int snp1_or_snp2 ) //snp1_or_snp2 --->0 is snp1, 1 is snp2
+{
+	int dnalength = dnasequence.length();
+	std::string concat = "";
+	if (snp1_or_snp2 == 0)
+		{
+			for (int i =  0; i < length	; i=i+2 )
+				concat+=dnasequence[i];
+		}
+	else
+		{
+			for (int i = 1; i < length	; i=i+2 )
+				concat+=dnasequence[i];
+		}
+	return concat;
+}
+
+std::vector<double> ErrorCalculator::returnhighest(std::string s1,std::string s2,int startIndex, int endIndex)
+{
+	double maxcount = 0.0 ;
+	double rcount = 0.0;
+
+	int runningcount = 0;
+	int snpindexBegin = 0;
+	int snpindexBegin_temp = 0;
+	int snpindexEnd = 0;
+	int snpindexEnd_temp = 0;
+	std::vector <double> indices;//snpindexBegin, snpindexEnd, maxcount
+
+	for (int i = startIndex ; i <=endIndex; i++)
+	{
+		if ((s1[i]!=s2[i] ) )
+			{
+				if (rcount > maxcount)
+				{
+					snpindexBegin = snpindexBegin_temp;
+					snpindexEnd = snpindexEnd_temp;
+					maxcount = rcount;
+				}
+					runningcount = 0;
+					rcount=0.0;
+			}
+		else if(s1[i]==s2[i])
+			{
+				if (runningcount == 0)
+				{
+					snpindexBegin_temp = i;
+				}
+				else
+				{
+					snpindexEnd_temp = i;
+					rcount =  (marker_id[snpindexEnd_temp].cm_distance - marker_id[snpindexBegin_temp].cm_distance );
+				}
+				runningcount++;
+
+
+/*			     std::cerr<<marker_id.size()<<std::endl;
+			     for (int i = 0;i<marker_id.size();i++)
+			     {
+			    	 std::cerr<<marker_id[i].chr<<"\t"<<marker_id[i].rsid<<"\t"<<marker_id[i].cm_distance<<"\t"<<marker_id[i].bp_distance<<endl;
+			     }*/
+			}
+		if (	!((i+1)<=endIndex)	)
+			{
+				if (rcount > maxcount)
+					{
+						snpindexBegin = snpindexBegin_temp;
+						snpindexEnd = snpindexEnd_temp;
+						maxcount = rcount;
+					}
+			}
+	}
+	indices.push_back(snpindexBegin);
+	indices.push_back(snpindexEnd);
+	indices.push_back(maxcount);
+	return indices;
+
+	//std::cout<<snpindexBegin<<"\t"<<snpindexEnd<<"\t"<<maxcount<<std::endl;
+}
+
+/*std::vector<int> returnhighest(std::string s1,std::string s2,int startIndex, int endIndex)
+{
+	int maxcount = 0 ;
+	int runningcount = 0;
+	int snpindexBegin = 0;
+	int snpindexBegin_temp = 0;
+	int snpindexEnd = 0;
+	int snpindexEnd_temp = 0;
+	std::vector <int> indices;//snpindexBegin, snpindexEnd, maxcount
+
+	for (int i = startIndex ; i <=endIndex; i++)
+	{
+		if ((s1[i]!=s2[i] ) )
+			{
+				if (runningcount > maxcount)
+				{
+					snpindexBegin = snpindexBegin_temp;
+					snpindexEnd = snpindexEnd_temp;
+					maxcount = runningcount;
+				}
+
+					runningcount = 0;
+			}
+		else if(s1[i]==s2[i])
+			{
+				if (runningcount == 0)
+				{
+					snpindexBegin_temp = i;
+				}
+				else
+				{
+					snpindexEnd_temp = i;
+				}
+				runningcount++;
+			}
+		if (	!((i+1)<=endIndex)	)
+			{
+				if (runningcount > maxcount)
+					{
+						snpindexBegin = snpindexBegin_temp;
+						snpindexEnd = snpindexEnd_temp;
+						maxcount = runningcount;
+					}
+			}
+	}
+	indices.push_back(snpindexBegin);
+	indices.push_back(snpindexEnd);
+	indices.push_back(maxcount);
+	return indices;
+
+	//std::cout<<snpindexBegin<<"\t"<<snpindexEnd<<"\t"<<maxcount<<std::endl;
+}*/
+
+
+
+
+
+
+
+
 
 void ErrorCalculator::finalErrorsOutput(int pers1, int pers2, int snp1, int snp2, float min_cm, float per_err){
   if(sample_id.size()<=pers1*2||sample_id.size()<=pers2*2)

@@ -78,10 +78,10 @@ void Consolidator::readMatches(std::string path,int pers_count, ErrorCalculator&
          }
 
 
-//unsigned long long counttt=0;
+unsigned long long counttt=0;
         while ( !file_bmatch.eof())
         {
-        	//counttt++;
+        	counttt++;
 
         		pid[0] = -1;
                 file_bmatch.read( (char*) &pid[0] , sizeof( unsigned int ) );
@@ -137,7 +137,8 @@ void Consolidator::readMatches(std::string path,int pers_count, ErrorCalculator&
                  }	
 
         }
-   // std::cout<<m_matches.size()<<std::endl;
+
+
         file_bmatch.close();
     }
     catch(std::exception &e)
@@ -767,6 +768,8 @@ void Consolidator::performHoldOutTrim( ErrorCalculator& ecal,
 void Consolidator::finalOutPut(ErrorCalculator &e,float min_cm, int min_snp )const
 {
 
+
+
      for(int i=0;i<person_count;i++)
         {
                 for(int j=i;j<person_count;j++)
@@ -774,7 +777,7 @@ void Consolidator::finalOutPut(ErrorCalculator &e,float min_cm, int min_snp )con
 
                          for(int l=0;l<m_matches[i][j].size();l++)
                          { 
-if(m_matches[i][j][l].start==-1||m_matches[i][j][l].end==-1 || ( m_matches[i][j][l].end - m_matches[i][j][l].start ) < min_snp ) continue;
+                        	 if(m_matches[i][j][l].start==-1||m_matches[i][j][l].end==-1 || ( m_matches[i][j][l].end - m_matches[i][j][l].start ) < min_snp ) continue;
                                 e.finalOutPut(i,j,m_matches[i][j][l].start,m_matches[i][j][l].end ,min_cm);                
                          }
 
