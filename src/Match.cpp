@@ -1,4 +1,5 @@
 #include "Match.h"
+#include "GERMLINE.h"
 
 void Match::extendBack()
 {
@@ -259,7 +260,6 @@ void Match::print( ostream& fout )
 
 	if ( BINARY_OUT )
 	{
-
 		unsigned int pid[2];
 		pid[0] = node[0]->getNumericID();
 		pid[1] = node[1]->getNumericID();
@@ -303,54 +303,71 @@ void Match::print( ostream& fout )
 			}
 
 		}
-	} else
+	}
+	if (IBD )
 	{
+		stringstream ss;
+		string eachline="";
 	
 		if(!REDUCE){	
-			fout << node[0]->getID() << '\t';
-			fout << node[1]->getID() << '\t';
+			MATCH_FILE2 << node[0]->getID() << '\t';
+			MATCH_FILE2 << node[1]->getID() << '\t';
 		}
 		else
 		{
 			string str;
 			int n1=node[0]->getID().find(" "), n2=node[0]->getID().length();
 //			if(!HAPLOID)
-				str=node[0]->getID().substr(0,n1-2);
+				/*str=node[0]->getID().substr(0,n1-2);*/
+			str=node[0]->getID();
 //			else
 //				str=node[0]->getID().substr(n1,n2-n1-2);
-			fout<<str<<'\t';
+			ss<<str<<'\t';		//MATCH_FILE2<<str<<'\t';
 			n1=node[1]->getID().find(" "); n2=node[1]->getID().length();
   //                      if(!HAPLOID)
-                                str=node[1]->getID().substr(0,n1-2);
+                                /*str=node[1]->getID().substr(0,n1-2);*/
+								str=node[1]->getID();
     //                    else
        //                         str=node[1]->getID().substr(n1,n2-n1-2);
-                        fout<<str<<'\t';
+              ss<<str<<'\t';                  //MATCH_FILE2<<str<<'\t';
 
 
 		}
 		if(!REDUCE)
+			MATCH_FILE2 << ALL_SNPS.getSNP(snp_start).getChr() << '\t';
+
 		
-			fout << ALL_SNPS.getSNP(snp_start).getChr() << '\t';
-		fout << ALL_SNPS.getSNP(snp_start).getPhysPos() << ' ';
-		fout << ALL_SNPS.getSNP(snp_end).getPhysPos() << '\t';
+		ss<<ALL_SNPS.getSNP(snp_start).getPhysPos() << '\t';     //MATCH_FILE2 << ALL_SNPS.getSNP(snp_start).getPhysPos() << ' ';
+		ss<<ALL_SNPS.getSNP(snp_end).getPhysPos() << '\t';	//MATCH_FILE2 << ALL_SNPS.getSNP(snp_end).getPhysPos() << '\t';
 		
 		if(!REDUCE){
-			fout << ALL_SNPS.getSNP(snp_start).getSNPID() << ' ';
-			fout << ALL_SNPS.getSNP(snp_end).getSNPID() << '\t';
+			MATCH_FILE2 << ALL_SNPS.getSNP(snp_start).getSNPID() << ' ';
+			MATCH_FILE2 << ALL_SNPS.getSNP(snp_end).getSNPID() << '\t';
 		}
 		
-		fout << ( snp_end - snp_start + 1) << '\t';
+		ss<<( snp_end - snp_start + 1) << '\t';	//MATCH_FILE2 << ( snp_end - snp_start + 1) << '\t';
 
-		fout << setiosflags(ios::fixed) << setprecision(2) << distance << '\t';
+		ss<<setiosflags(ios::fixed) << setprecision(2) << distance;	//MATCH_FILE2 << setiosflags(ios::fixed) << setprecision(2) << distance;
 
 		if(!REDUCE){
-			if ( genetic ) fout << "cM" << '\t'; else fout << "MB" << '\t';
+			MATCH_FILE2<<'\t';
+			if ( genetic ) MATCH_FILE2 << "cM" << '\t'; else MATCH_FILE2 << "MB" << '\t';
 		
-				fout << dif;
+			MATCH_FILE2 << dif;
 			for ( int n = 0 ; n < 2 ; n++ )
-				if ( hom[n] ) fout << '\t' << 1; else fout << '\t' << 0;
+				if ( hom[n] ) MATCH_FILE2 << '\t' << 1; else MATCH_FILE2 << '\t' << 0;
 		}
-			fout << endl;
+		//ss<<endl;	//MATCH_FILE2 << endl;
+		ss>>eachline>>eachline;
+		MATCH_FILE2<<eachline<<'\t';	//person1 2nd col
+
+		ss>>eachline>>eachline;
+		MATCH_FILE2<<eachline;	//person2 2nd col
+
+		getline(ss,eachline);	//get remaining string from stringstream
+		MATCH_FILE2<<eachline<<endl;
+		ss.str("");
+		ss.clear();
 	}
 	num_matches++;
 }

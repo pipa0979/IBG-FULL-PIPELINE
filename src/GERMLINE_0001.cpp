@@ -40,6 +40,7 @@ std::string GENFILE="";
 
 bool isInteger(std::string s);
 bool isPath(std::string s);
+bool IBD = false; // To check if the file is IBD2 or IBD4. Changes done in Match,cpp file to compute .match along with .bmatch
 void helpShowParameters();
 
 int main(int argc, char* argv[])
@@ -111,6 +112,7 @@ int main(int argc, char* argv[])
 	grade_list2["-count.gap.errors"] = "NULL";
 	bool help = false;
 	bool bad_param = false;
+	//bool ibd = false;	//Defined globally s othat it can be used inthe Match.cpp file
 
 	std::vector<std::string> flagPool;
 	for(map<std::string, std::string>::iterator it = grade_list.begin(); it != grade_list.end(); ++it) {
@@ -137,6 +139,11 @@ int main(int argc, char* argv[])
 			helpShowParameters();
 			//bad_param = true;
 			//continue;
+		}
+		if( strcmp(argv[i], "-ibd") == 0 )
+		{
+			IBD = true;
+			continue;
 		}
 
 		if (temp[0] != '-')
@@ -766,7 +773,7 @@ if (OUTFILE == "")
     			system(makedir.c_str());
 
     			string movedir="";
-    			for (int i = 0 ; i <4; i ++)
+    			for (int i = 0 ; i <5; i ++)
     			    {
 
     					if (i == 0)
@@ -777,10 +784,11 @@ if (OUTFILE == "")
 							movedir = "mv "+ PEDFILE.substr(0,PEDFILE.find_last_of('.')) + ".bmatch " + germline_output;
     					else if(i == 3)
 							movedir = "mv "+ PEDFILE.substr(0,PEDFILE.find_last_of('.')) + ".log " + germline_output;
+    					else if ((i == 4) && IBD	)
+    						movedir = "mv "+ PEDFILE.substr(0,PEDFILE.find_last_of('.')) + ".match " + germline_output;
     					else
-    					{
+    					{}
 
-    					}
     					system(movedir.c_str());
     			    }
     		}
@@ -859,7 +867,8 @@ void helpShowParameters()
 			<<'\t'<<"-trueSNP [ true match SNP length]"<< endl
 			<<'\t'<<"-PIE.dist.length [ can be MOL or any cm distance length "<< endl
 			<<'\t'<<" please refer wiki for more details on how to use this option"<< endl
-			<<'\t'<<"-count.gap.errors [ TRUE or FALSE to include gap errors in errors count ]"<< endl;
+			<<'\t'<<"-count.gap.errors [ TRUE or FALSE to include gap errors in errors count ]"<< endl
+			<<'\t'<<"-ibd" <<"\t compute ibd2 and ibd4"<< endl;
 	exit(0);
 }
 

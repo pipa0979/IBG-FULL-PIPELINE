@@ -6,7 +6,9 @@
 
 using namespace std;
 
-ofstream MATCH_FILE;
+ofstream MATCH_FILE;	//bmatch file
+ofstream MATCH_FILE2;	//match file
+
 size_t num_samples;
 unsigned long num_matches;
 SNPs ALL_SNPS;
@@ -42,9 +44,14 @@ void GERMLINE::mine( string params )
 	fout << " Itsik Pe'er's Computational Biology Lab at Columbia University" << endl;
 	fout << setw(65) << setfill('-') << ' ' << endl << setfill(' ');
 	
+
 	if ( BINARY_OUT ) MATCH_FILE.open( ( out + ".bmatch" ).c_str() , ios::binary );
-	else MATCH_FILE.open( ( out + ".match" ).c_str() );
 	
+	if (IBD)	MATCH_FILE2.open( ( out + ".match" ).c_str() );
+
+
+	//else MATCH_FILE.open( ( out + ".match" ).c_str() );
+
 	fout << params << endl;
 	fout << setw(65) << setfill('-') << ' ' << endl << setfill(' ');
 	fout << setw(50) << left << "Minimum match length: " << MIN_MATCH_LEN << " cM" << endl;
@@ -90,6 +97,10 @@ void GERMLINE::mine( string params )
 	fout << setw(50) << "Total runtime (sec): " << difftime( timer[1] , timer[0] ) << endl;
 	fout.close();
 	MATCH_FILE.close();
+	if (IBD) MATCH_FILE.close();
+
+
+
 	if ( BINARY_OUT )
 	{
 		ofstream bmid_out( ( out + ".bmid" ).c_str() );

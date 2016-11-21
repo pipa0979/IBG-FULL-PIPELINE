@@ -39,7 +39,8 @@ class SNPs;
 class Individuals;
 extern SNPs ALL_SNPS;
 extern Individuals ALL_SAMPLES;
-extern ofstream MATCH_FILE;
+extern ofstream MATCH_FILE; //bmatch filr
+extern ofstream MATCH_FILE2; //match file
 extern string PEDFILE;
 extern string MAPFILE;
 extern string OUTFILE;
@@ -48,7 +49,7 @@ const int HET=2;
 const int MIS=9;
 const short PAR_M = 0;
 const short PAR_F = 1;
-
+extern bool IBD;
 // type for file format
 enum FileFormat{HAPS,PED,HM};
 // type for families

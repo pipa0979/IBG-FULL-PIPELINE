@@ -15,7 +15,7 @@
 
 
 ErrorFinderManager::ErrorFinderManager():
-                    WINDOW(50),
+					WINDOW(50),
                     MIN_SNP(30),GAP(1), MA_SNP_END(50), TRUESNP( 600 ),
                     MIN_CM(0.4), MA_ERR_THRESHOLD_START(0.08),
                     MA_ERR_THRESHOLD_END(0.08),PCT_ERR_THRESHOLD( 0.90 ),
@@ -27,9 +27,9 @@ ErrorFinderManager::ErrorFinderManager():
 template <typename T>
 std::string NumberToString ( T Number )
 {
-    std::ostringstream ss;
-    ss << Number;
-    return ss.str();
+	std::ostringstream ss;
+	ss << Number;
+	return ss.str();
 }
 
 
@@ -40,21 +40,21 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
        bool pieThresholdError = false;
        char currentPath[FILENAME_MAX];
        if(!GetCurrentDir(currentPath,sizeof(currentPath))){
-            std::cerr << "Error reading current directory" << std::endl;
-        return;
+	        std::cerr << "Error reading current directory" << std::endl;
+		return;
        }
        for(int i=1;i<argc;i++)
         {
-          // std::cout<<argv[i]<<std::endl;
+    	  // std::cout<<argv[i]<<std::endl;
 
-           /*Code for expanding window*/
-                if (strcmp(argv[i],"-extendSNP")==0 && i<argc-1)
-                {
-                    EXTENDSNP=atoi(argv[++i]);
-                    //cout<<"entered snp = "<<EXTENDSNP<<endl;
-                }
+    	   /*Code for expanding window*/
+    	   	    if (strcmp(argv[i],"-extendSNP")==0 && i<argc-1)
+    	   	    {
+    	   	    	EXTENDSNP=atoi(argv[++i]);
+    	   	    	//cout<<"entered snp = "<<EXTENDSNP<<endl;
+    	   	    }
 
-                else if(strcmp(argv[i],"-bmatch")==0&&i<argc-1)
+    	   	    else if(strcmp(argv[i],"-bmatch")==0&&i<argc-1)
                 {
                      BMATCHFILE=std::string(argv[++i]);
                 }
@@ -72,24 +72,24 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
                      MIN_CM=atof(argv[++i]);
                 }*/
                 else if(strcmp(argv[i],"-min_snp")==0&&i<argc-1)
-                {
-                     MIN_SNP=atoi(argv[++i]);
-                }
+				{
+					 MIN_SNP=atoi(argv[++i]);
+				}
 
                 else if(strcmp(argv[i],"-min_cm_final")==0&&i<argc-1)
-                {
-                     MIN_CM=atoi(argv[++i]);
-                }
+				{
+					 MIN_CM=atoi(argv[++i]);
+				}
 
                 else  if(strcmp(argv[i],"-pedfile")==0&&i<argc-1)
                 {
                      PEDFILE=std::string(argv[++i]);
                 }
-                    else  if(strcmp(argv[i],"-holdout-ped")==0&&i<argc-1)
+		            else  if(strcmp(argv[i],"-holdout-ped")==0&&i<argc-1)
                 {
                      HPEDFILE=std::string(argv[++i]);
                 }
-                    else  if(strcmp(argv[i],"-holdout-map")==0&&i<argc-1)
+		            else  if(strcmp(argv[i],"-holdout-map")==0&&i<argc-1)
                 {
                      HMAPFILE=std::string(argv[++i]);
                 }
@@ -124,7 +124,7 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
                 else  if(strcmp(argv[i],"-pct-err-threshold")==0&&i<argc-1)
                 {
                      if(pieThresholdError == true){
-                         std::cerr << "ERROR: You have supplied both -emp-pie-threshold and -pct-err-threshold parameters, but only one is allowed. Please try again." << std::endl;
+                    	 std::cerr << "ERROR: You have supplied both -emp-pie-threshold and -pct-err-threshold parameters, but only one is allowed. Please try again." << std::endl;
                       exit(1);
                      }
                      PCT_ERR_THRESHOLD=atof(argv[++i]);
@@ -133,13 +133,13 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
                 else if(strcmp(argv[i],"-emp-pie-threshold")==0&&i<argc-1)
                 {
                      if(pieThresholdError == true){
-                         std::cerr << "ERROR: You have supplied both -emp-pie-threshold and -pct-err-threshold parameters, but only one is allowed. Please try again." << std::endl;
+                    	 std::cerr << "ERROR: You have supplied both -emp-pie-threshold and -pct-err-threshold parameters, but only one is allowed. Please try again." << std::endl;
                       exit(1);
                      }
                      EMPIRICAL_PIE_RESULT=atof(argv[++i]);
                      pieThresholdError = true;
                 }
-                    else  if(strcmp(argv[i],"-output-type")==0&&i<argc-1)
+		            else  if(strcmp(argv[i],"-output-type")==0&&i<argc-1)
                 {
                      OPTION=std::string(argv[++i]);
                      //cout<<OPTION<<endl;
@@ -151,26 +151,26 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
                 {
                      LOGFILE=std::string(argv[++i]);
                 }
-        else if(strcmp(argv[i],"-ma-threshold")==0&&i<argc-1)//adding new -ma-threshold argument
-        {
-             if(thresholdError == true){ //user has already supplied an empirical-ma-threshold, so exit the program with an error message
-                 std::cerr << "ERROR: You have supplied both -empirical-ma-threshold and -ma-threshold parameters, but only one is allowed. Exiting program."<< std::endl;
+		else if(strcmp(argv[i],"-ma-threshold")==0&&i<argc-1)//adding new -ma-threshold argument
+		{
+		     if(thresholdError == true){ //user has already supplied an empirical-ma-threshold, so exit the program with an error message
+		    	 std::cerr << "ERROR: You have supplied both -empirical-ma-threshold and -ma-threshold parameters, but only one is allowed. Exiting program."<< std::endl;
                         exit(1);
-             }
-             MA_THRESHOLD=atof(argv[++i]);
-             thresholdError = true;
-        }
-        else if(strcmp(argv[i],"-empirical-ma-threshold")==0 && i<argc-1){
-             if(thresholdError == true){
-                 std::cerr << "ERROR: You have supplied both -empirical-ma-threshold and -ma-threshold parameters, but only one is allowed. Exiting program."<< std::endl;
-            exit(1);
-             }
-             EMPIRICAL_MA_RESULT = atof(argv[++i]); //use the user supplied empirical ma threshold, instead of calculating it via true ibd segments
-             thresholdError = true;
-        }
+		     }
+		     MA_THRESHOLD=atof(argv[++i]);
+		     thresholdError = true;
+		}
+		else if(strcmp(argv[i],"-empirical-ma-threshold")==0 && i<argc-1){
+		     if(thresholdError == true){
+		    	 std::cerr << "ERROR: You have supplied both -empirical-ma-threshold and -ma-threshold parameters, but only one is allowed. Exiting program."<< std::endl;
+			exit(1);
+		     }
+		     EMPIRICAL_MA_RESULT = atof(argv[++i]); //use the user supplied empirical ma threshold, instead of calculating it via true ibd segments
+		     thresholdError = true;
+		}
                 else  if(strcmp(argv[i],"-PIE.dist.length")==0&&i<argc-1)
                 {
-                    std::string MOL=std::string(argv[++i]);
+                	std::string MOL=std::string(argv[++i]);
                      if( MOL.compare( "MOL" ) ==0 )
                      {
                         ISMOL = true;
@@ -182,7 +182,7 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
                 }
                 else  if(strcmp(argv[i],"-count.gap.errors")==0&&i<argc-1)
                 {
-                    std::string option=std::string(argv[++i]);
+                	std::string option=std::string(argv[++i]);
                      if( option.compare( "TRUE" ) ==0 )
                      {
                         COUNTGAPERR = true;
@@ -205,12 +205,12 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
         }
         if( OPTION.compare( "" ) == 0 )
         {
-            std::cerr<< " please provide a valid output-type option " <<std::endl;
+        	std::cerr<< " please provide a valid output-type option " <<std::endl;
             exit( -1 );
         }
         if( LOGFILE.compare( "" ) == 0 )
         {
-            std::cerr<< " default log file name is FISH " <<std::endl;
+        	std::cerr<< " default log file name is FISH " <<std::endl;
             LOGFILE = "FISH";
         }
         eCalculator.createLogFile( LOGFILE  );
@@ -223,16 +223,16 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
         str_head += "FISHR LOG FILE INFORMATION\n\n";
         std::string str1 = " The program started at: " + std::string( ctime ( &startTime ) );
         std::string str = str_head + "Program working directory was: " + std::string(currentPath) +
-             " \nProgram version was: " + std::string(argv[0]) +
-             " \nProgram options:\n-bmatch file: " + BMATCHFILE +
+		     " \nProgram version was: " + std::string(argv[0]) +
+		     " \nProgram options:\n-bmatch file: " + BMATCHFILE +
                      " \n-bmid file: " + BMIDFILE +
                      " \n-bsid file: " + BSIDFILE +
                      " \n-ped file: " + PEDFILE;
-             if(HPEDFILE.compare( "" ) !=0 && HMAPFILE.compare( "" ) !=0){
-             str +=
+		     if(HPEDFILE.compare( "" ) !=0 && HMAPFILE.compare( "" ) !=0){
+		     str +=
                      " \n-holdout ped file: " + HPEDFILE +
                      " \n-holdoutmap file: " + HMAPFILE;
-             }
+		     }
                      str += " \n-output type: " + OPTION +
                      " \n- missing SNP representation in pedfile: " + HO_MISSING +
                      " \n-log file: " + LOGFILE;
@@ -261,15 +261,15 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
         initiateErrorFinder(); //but bypass true calculations if empirical threshold is supplied
       if( HPEDFILE.compare( "" ) !=0 && HMAPFILE.compare( "" ) != 0 )
       {
-          std::cerr<<"entering into HoldOut Mode Matching"<<std::endl;
+    	  std::cerr<<"entering into HoldOut Mode Matching"<<std::endl;
 /*           consolidator.performTrim(eCalculator,
                               WINDOW,MA_SNP_END,
                              MA_ERR_THRESHOLD_START,
                              MA_ERR_THRESHOLD_END,MIN_SNP,
                              MIN_CM,PCT_ERR_THRESHOLD, OPTION, HO_THRESHOLD, true  );*/
-       consolidator.performTrim(eCalculator, WINDOW, MA_SNP_END,MA_THRESHOLD,MIN_SNP,MIN_CM,PCT_ERR_THRESHOLD,OPTION,HO_THRESHOLD,true,EMPIRICAL_MA_RESULT,EMPIRICAL_PIE_RESULT,EXTENDSNP);//<piyush> added the param EXTENDSNP for calculating moving window
-       std::cerr<<" Main Trim operation has completed "<< std::endl;
-       std::cerr<< " Hold out trim has completed" <<std::endl;
+	   consolidator.performTrim(eCalculator, WINDOW, MA_SNP_END,MA_THRESHOLD,MIN_SNP,MIN_CM,PCT_ERR_THRESHOLD,OPTION,HO_THRESHOLD,true,EMPIRICAL_MA_RESULT,EMPIRICAL_PIE_RESULT,EXTENDSNP);//<piyush> added the param EXTENDSNP for calculating moving window
+	   std::cerr<<" Main Trim operation has completed "<< std::endl;
+	   std::cerr<< " Hold out trim has completed" <<std::endl;
            if( (OPTION.compare( "finalOutput" ) == 0) || (OPTION.compare( "Full" ) == 0 ) )
            {
                 consolidator.finalOutPut( eCalculator, MIN_CM, MIN_SNP );
@@ -280,30 +280,30 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
        {
             if( OPTION.compare( "Error3") == 0 )
             {
-                std::cerr<< " Error: You have provided option:Error3 " << std::endl
+            	std::cerr<< " Error: You have provided option:Error3 " << std::endl
                    <<" you can use Error3 only if you provided"
                    <<" hold out ped and map file, program with not output anything" << std::endl;
               exit( -1 );
             }
 
            consolidator.performTrim(eCalculator, WINDOW, MA_SNP_END, MA_THRESHOLD, MIN_SNP, MIN_CM, PCT_ERR_THRESHOLD, OPTION, HO_THRESHOLD, false,EMPIRICAL_MA_RESULT,EMPIRICAL_PIE_RESULT,EXTENDSNP);//<piyush> added the param EXTENDSNP for calculating moving window
-       //Removing this option for now. Can add/remove later as need be
+	   //Removing this option for now. Can add/remove later as need be
       /*     consolidator.performTrim(eCalculator,WINDOW,MA_SNP_END,
                                     MA_ERR_THRESHOLD_START,
                                     MA_ERR_THRESHOLD_END,MIN_SNP,MIN_CM,
                                     PCT_ERR_THRESHOLD, OPTION, HO_THRESHOLD, false );*/
           if( (OPTION.compare( "finalOutput" ) == 0) || (OPTION.compare( "Full" ) == 0 ) )
            {
-        //cerr <<"DEBUG: ENTERING CONSOLIDATOR FINAL OUTPUT" << endl;
+		//cerr <<"DEBUG: ENTERING CONSOLIDATOR FINAL OUTPUT" << endl;
                 consolidator.finalOutPut( eCalculator, MIN_CM, MIN_SNP );
-        //cerr <<"DEBUG: EXITING CONSOLIDATOR FINAL OUTPUT" << endl;
+		//cerr <<"DEBUG: EXITING CONSOLIDATOR FINAL OUTPUT" << endl;
            }
         }
         time_t endTime;
         time (&endTime);
         /*Provide the log file with information about start and end times*/
         std::string str2 = " The program ended at: " +
-                std::string( ctime ( &endTime ) );
+        		std::string( ctime ( &endTime ) );
          //remove trailing newline, for readability.
          str1.erase(std::remove(str1.begin(),str1.end(),'\n'),str1.end());
          str2.erase(std::remove(str2.begin(),str2.end(),'\n'),str2.end());
@@ -319,8 +319,8 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
 }
 void ErrorFinderManager::displayError(std::string argv)
 {
-    std::cerr<<"these parameters are not allowed "<<wrongParam<<std::endl;
-    std::cerr << "Usage: " << argv << " -bmatch [BMATCH FILE]  -bsid [BSID FILE] -bmid [BMID FILE] -reduced [min_snp] [min_cm] "
+	std::cerr<<"these parameters are not allowed "<<wrongParam<<std::endl;
+	std::cerr << "Usage: " << argv << " -bmatch [BMATCH FILE]  -bsid [BSID FILE] -bmid [BMID FILE] -reduced [min_snp] [min_cm] "
              <<" -ped-file [ped file] -window [window width to calculate moving averages] "
              <<" -gap [max gap to consolidate two matches]"
                <<" -pct-err-threshold [max percentage of errors in a match after the trim] OR -emp-pie-threshold" 
@@ -361,35 +361,35 @@ void ErrorFinderManager::initiateErrorFinder()
         consolidator.performConsolidation(eCalculator,GAP,MIN_SNP,MIN_CM,EXTENDSNP);
         std::cerr<<"Consolidation completed"<<std::endl;
         if( HPEDFILE.compare( "" ) !=0 && HMAPFILE.compare( "" ) != 0 )
-            {
-                eCalculator.changeMapFile( HMAPFILE );
-                eCalculator.readHPedFile( HPEDFILE, HO_MISSING );
-                std::cerr<< " new map and ped File has read" <<std::endl;
-                std::cerr<< " calculating true percentage errors" <<std::endl;
-                if( ISMOL )
-                {
-                consolidator.findTruePctErrors( eCalculator, MA_SNP_END, true, WINDOW,MA_THRESHOLD, EMPIRICAL_MA_RESULT);
+			{
+				eCalculator.changeMapFile( HMAPFILE );
+				eCalculator.readHPedFile( HPEDFILE, HO_MISSING );
+				std::cerr<< " new map and ped File has read" <<std::endl;
+				std::cerr<< " calculating true percentage errors" <<std::endl;
+				if( ISMOL )
+				{
+				consolidator.findTruePctErrors( eCalculator, MA_SNP_END, true, WINDOW,MA_THRESHOLD, EMPIRICAL_MA_RESULT);
 
-                }
-                else
-                {
-                consolidator.findTrueSimplePctErrors( eCalculator, PIELENGTH, true, WINDOW, MA_THRESHOLD, EMPIRICAL_MA_RESULT );
-                }
-                std::cerr<< " true percentage errors calculated "<<std::endl;
-            }
+				}
+				else
+				{
+				consolidator.findTrueSimplePctErrors( eCalculator, PIELENGTH, true, WINDOW, MA_THRESHOLD, EMPIRICAL_MA_RESULT );
+				}
+				std::cerr<< " true percentage errors calculated "<<std::endl;
+			}
        else
-        {
-            std::cerr<< " calculating true percentage errors" <<std::endl;
-            if( ISMOL )
-            {
-            consolidator.findTruePctErrors( eCalculator, MA_SNP_END, false, WINDOW, MA_THRESHOLD, EMPIRICAL_MA_RESULT );
-            }
-            else
-            {
-            consolidator.findTrueSimplePctErrors( eCalculator, PIELENGTH, false, WINDOW, MA_THRESHOLD, EMPIRICAL_MA_RESULT );//<piyush>
-            }
-            std::cerr<< " true hold out percentage errors calculated "<<std::endl;
+		{
+			std::cerr<< " calculating true percentage errors" <<std::endl;
+			if( ISMOL )
+			{
+			consolidator.findTruePctErrors( eCalculator, MA_SNP_END, false, WINDOW, MA_THRESHOLD, EMPIRICAL_MA_RESULT );
+			}
+			else
+			{
+			consolidator.findTrueSimplePctErrors( eCalculator, PIELENGTH, false, WINDOW, MA_THRESHOLD, EMPIRICAL_MA_RESULT );//<piyush>
+			}
+			std::cerr<< " true hold out percentage errors calculated "<<std::endl;
 
-        }
+		}
   
 }
