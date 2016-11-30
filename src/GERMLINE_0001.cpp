@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
 	grade_list["-genfile"] = "NULL";
 	grade_list["-samplefile"] = "NULL";
 	grade_list["-germline_output"] = "NULL";
-	grade_list["-ibd"] = "NULL";
+	grade_list["-ibd2"] = "NULL";
 
 	//-mapfile ./src/Test.map  -pedfile ./src/Test.ped -outfile BEAGLE_OUT -bin_out -bits 20 -err_hom 0 -err_het 0 -min_m 3 -homoz  -w_extend -h_extend
 	std::map <std::string, std::string> grade_list2;
@@ -199,7 +199,7 @@ int main(int argc, char* argv[])
 				  //std::cout<<argv[i]<<std::endl;
 				  glcopy[glcopycount] = new char[strlen(argv[i])+1];	strcpy(glcopy[glcopycount],argv[i]);	glcopycount++;
 			  }
-			  else if( strncmp(argv[i], "-ibd", strlen("-ibd")) == 0)
+			  else if( strncmp(argv[i], "-ibd2", strlen("-ibd2")) == 0)
 			  {
 				  i++;
 				  //std::cout<<argv[i]<<std::endl;
@@ -481,7 +481,7 @@ string germline_output = "./";
 			GERMLINE_OUTPUT = true;
 			germline_output = glcopy[++i];
 		}
-		else if ( strncmp(glcopy[i], "-ibd", strlen("-ibd")) == 0 )
+		else if ( strncmp(glcopy[i], "-ibd2", strlen("-ibd2")) == 0 )
 		{
 			IBD = true;
 			IBD_THRESHOLD = atof(glcopy[++i]);
@@ -501,7 +501,7 @@ string germline_output = "./";
 if (IBD && (IBD_THRESHOLD == -1.0))
 {
 	bad_param = true;
-	std::cerr<<"-ibd <value>";
+	std::cerr<<"-ibd2 <value>";
 }
 	//BINARY_OUT = true;	//Should always be true
 
@@ -887,7 +887,7 @@ void helpShowParameters()
 			<<'\t'<<"-PIE.dist.length [ can be MOL or any cm distance length "<< endl
 			<<'\t'<<" please refer wiki for more details on how to use this option"<< endl
 			<<'\t'<<"-count.gap.errors [ TRUE or FALSE to include gap errors in errors count ]"<< endl
-			<<'\t'<<"-ibd <threshold value>" <<"\t compute ibd2 and ibd4"<< endl;
+			<<'\t'<<"-ibd2 <threshold value>" <<"\t compute ibd2 and ibd4"<< endl;
 	exit(0);
 }
 
