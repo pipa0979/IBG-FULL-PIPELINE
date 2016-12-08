@@ -45,7 +45,7 @@ if (lenhaps_sample[0][0] == lenhaps_sample[1][0])
 }
 else
 {
-	std::cout<<"INCONSISTENT SAMPLE AND HAP FILE... THE NUMBER OF PAIRS IN THE "<<
+	std::cerr<<"INCONSISTENT SAMPLE AND HAP FILE... THE NUMBER OF PAIRS IN THE "<<
 			   "HAPS FILE IS NOT EQUAL TO THE NUBER OF LINES IN THE SAMPLE FILE... EXITING "<<std::endl;
 	exit(0);
 }
@@ -133,7 +133,7 @@ void Compute::createped(std::string hapfilename)
 	std::ofstream fped(pedfilename.c_str());
 	if (!fped.is_open())
 	{
-		std::cout<<"ERROR: OUTPUT FILE CANNOT BE OPENED FOR PED DUMP...EXITING"<<std::endl;
+		std::cerr<<"ERROR: OUTPUT FILE CANNOT BE OPENED FOR PED DUMP...EXITING"<<std::endl;
 		exit(0);
 	}
 
@@ -199,7 +199,7 @@ void Compute::createped(std::string hapfilename)
 	}
 	else
 	{
-		std::cout<<"Check the consistency of the .hap file...Program exiting"<<std::endl;
+		std::cerr<<"Check the consistency of the .hap file...Program exiting"<<std::endl;
 		exit(0);
 	}
 	fped.close();
@@ -232,7 +232,7 @@ void Compute::haps2vec(std::string hapfilename)
 		}
 	else
 		{
-			std::cout<<hapfilename<<" : Hap file cannot be opened...Exiting "<<std::endl;
+			std::cerr<<hapfilename<<" : Hap file cannot be opened...Exiting "<<std::endl;
 			exit(0);
 		}
 
@@ -259,7 +259,7 @@ void Compute::sample2vec(std::string samplefilename)
 		}
 	else
 		{
-			std::cout<<samplefilename<<" : Sample file cannot be opened...Exiting "<<std::endl;
+			std::cerr<<samplefilename<<" : Sample file cannot be opened...Exiting "<<std::endl;
 			exit(0);
 		}
 
@@ -361,7 +361,7 @@ void Compute::gen2vec(std::string genfilename	)
 		}
 	else
 		{
-			std::cout<<genfilename<<" : gen file file cannot be opened...Exiting "<<std::endl;
+			std::cerr<<genfilename<<" : gen file file cannot be opened...Exiting "<<std::endl;
 			exit(0);
 		}
 
