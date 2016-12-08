@@ -303,14 +303,16 @@ void Compute::sample2vec(std::string samplefilename)
 		{
 			samplefiletype = "7_COL";
 			std::getline(samplefile, line ); // get rid of 0 0 0 in the second row of the file
+			size_t countlines = 0;
 			if (samplefile.is_open())
 				{
 					while(std::getline(samplefile, line ))
 						{
+							countlines++;
 							ss<<line;
 							ss>>sample_7_col.ID_1;
 							ss>>sample_7_col.ID_2;
-							ss>>sample_7_col.father>>sample_3_col.father;
+							ss>>sample_7_col.father>>sample_7_col.father;
 							ss>>sample_7_col.mother;
 							ss>>sample_7_col.sex;
 							ss>>sample_7_col.plink_phemo;
@@ -319,6 +321,7 @@ void Compute::sample2vec(std::string samplefilename)
 							ss.clear();
 						}
 				}
+			lenhaps_sample[1].push_back(countlines);
 			samplefile.close();
 		}
 
