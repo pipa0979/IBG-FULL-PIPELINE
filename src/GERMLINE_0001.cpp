@@ -79,8 +79,8 @@ int main(int argc, char* argv[])
 	grade_list["-w_extend"] = "NULL";
 	grade_list["-no_suffix"] = "NULL";
 	//grade_list["-reduced"] = "NULL";
-	grade_list["-hapfile"] = "NULL";
-	grade_list["-genfile"] = "NULL";
+	grade_list["-hapsfile"] = "NULL";
+	grade_list["-geneticmapfile"] = "NULL";
 	grade_list["-samplefile"] = "NULL";
 	grade_list["-germline_output"] = "NULL";
 	grade_list["-ibd2"] = "NULL";
@@ -252,12 +252,12 @@ int main(int argc, char* argv[])
 			  //std::cout<<argv[i]<<std::endl;
 			  glcopy[glcopycount] = new char[strlen(argv[i])+1];	strcpy(glcopy[glcopycount],argv[i]);	glcopycount++;
 			  }
-			  else if (strncmp(argv[i], "-hapfile", strlen("-hapfile")) == 0)
+			  else if (strncmp(argv[i], "-hapsfile", strlen("-hapsfile")) == 0)
 			  {i++;
 			 // std::cout<<argv[i]<<std::endl;
 			  glcopy[glcopycount] = new char[strlen(argv[i])+1];	strcpy(glcopy[glcopycount],argv[i]);	glcopycount++;
 			  }
-			  else if (strncmp(argv[i], "-genfile", strlen("-genfile")) == 0)
+			  else if (strncmp(argv[i], "-geneticmapfile", strlen("-geneticmapfile")) == 0)
 			  {i++;
 			  //std::cout<<argv[i]<<std::endl;
 			  glcopy[glcopycount] = new char[strlen(argv[i])+1];	strcpy(glcopy[glcopycount],argv[i]);	glcopycount++;			  }
@@ -487,8 +487,8 @@ string germline_output = "./";
 			IBD_THRESHOLD = atof(glcopy[++i]);
 		}
 
-		else if (strncmp(glcopy[i], "-hapfile", strlen("-hapfile")) == 0)			HAPFILE = glcopy[++i];
-		else if (strncmp(glcopy[i], "-genfile", strlen("-genfile")) == 0)			GENFILE = glcopy[++i];
+		else if (strncmp(glcopy[i], "-hapsfile", strlen("-hapsfile")) == 0)			HAPFILE = glcopy[++i];
+		else if (strncmp(glcopy[i], "-geneticmapfile", strlen("-geneticmapfile")) == 0)			GENFILE = glcopy[++i];
 		else if (strncmp(glcopy[i], "-samplefile", strlen("-samplefile")) == 0)	SAMPLEFILE = glcopy[++i];
 		else
                 {
@@ -535,8 +535,8 @@ if (IBD && (IBD_THRESHOLD == -1.0))
 		else if( strncmp(argv[i], "-no_suffix", strlen("-no_suffix")) == 0 )                                      NO_SUFFIX = true;
 		else if( strncmp(argv[i], "-reduced", strlen("-reduced")) == 0 )                                      REDUCE = true;
 
-		else if (strncmp(argv[i], "-hapfile", strlen("-hapfile")) == 0)			HAPFILE = argv[++i];
-		else if (strncmp(argv[i], "-genfile", strlen("-genfile")) == 0)			GENFILE = argv[++i];
+		else if (strncmp(argv[i], "-hapsfile", strlen("-hapsfile")) == 0)			HAPFILE = argv[++i];
+		else if (strncmp(argv[i], "-geneticmapfile", strlen("-geneticmapfile")) == 0)			GENFILE = argv[++i];
 		else if (strncmp(argv[i], "-samplefile", strlen("-samplefile")) == 0)	SAMPLEFILE = argv[++i];
 		else
                 {
@@ -844,9 +844,9 @@ void helpShowParameters()
 			<< " -pedfile [ped file ]" << endl
 			<< " -mapfile [map file ]" << endl
 			<< " -outfile [ out file ]"<<endl
-			<< " -genfile [ gen file ]"<<endl
+			<< " -geneticmapfile [ gen file ]"<<endl
 			<< " -samplefile [ sample file ]"<<endl
-			<< " -hapfile [ hap file ]"<<endl
+			<< " -hapsfile [ hap file ]"<<endl
 			<< '\t' << "-silent" << '\t' << "Suppress all output except for warnings and prompts." << endl
 			<< '\t' << "-bin_out" << '\t' << "Output in binary format to save space." << endl
 			<< '\t' << "-min_cm_initial" << '\t' << "Minimum length for match to be used for imputation (in cM or MB)." << endl
@@ -865,9 +865,9 @@ void helpShowParameters()
 			<< '\t' << "-reduced" << '\t' << "output only reduced elements" << endl
 			<< '\t' << "-no_suffix" << '\t' << "use with -hapoloid to outputthe cell with no .0 or .1 suffix" << endl
 			<< '\t' << "--err_w" << '\t' << "use with -wextend to allow error matches like 1,2,3 etc in extending" << endl
-			<<'\t'	<< "-hap"	 <<'\t'	 << "if using hap file, use this flag. usuage: -hap <hapfilename.hap>  Must also supply \".sample\" and \".gen\" file using flags -sample and -gen"<< endl
-			<<'\t'	<< "-sample"	 <<'\t'	 << "if using hap file, use this flag for the corresponding sample file. usuage: -sample <samplefilename.sample>  Must also supply \".hap\" and \".gen\" file using flags -hap and -gen"<< endl
-			<<'\t'	<< "-gen"	 <<'\t'	 << "if using hap file, use this flag to supply the corresponding gen file. usuage: -gen <genfile.gen>  Must also supply \".hap\" and \".sample\" file using flags -hap and -sample"<< endl
+			<<'\t'	<< "-hapsfile"	 <<'\t'	 << "if using hap file, use this flag. usuage: -hapsfile <hapfilename.hap>  Must also supply \".sample\" and \".gen\" file using flags -sample and -geneticmapfile"<< endl
+			<<'\t'	<< "-sample"	 <<'\t'	 << "if using hap file, use this flag for the corresponding sample file. usuage: -sample <samplefilename.sample>  Must also supply \".hap\" and \".gen\" file using flags -hapsfile and -geneticmapfile"<< endl
+			<<'\t'	<< "-geneticmapfile"	 <<'\t'	 << "if using hap file, use this flag to supply the corresponding gen file. usuage: -geneticmapfile <genfile.gen>  Must also supply \".hap\" and \".sample\" file using flags -hapsfile and -sample"<< endl
 			<<"\n"<<endl
 			<<'\t'<<"-window [window width to calculate moving averages] "<< endl
 			<<'\t'<<"-gap [max gap to consolidate two matches]"<< endl
