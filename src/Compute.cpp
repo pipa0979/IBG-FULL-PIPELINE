@@ -22,6 +22,16 @@
 std::string Compute::samplefiletype = "NULL";
 std::vector<size_t> Compute::lenhaps_sample[2];
 double linearInterpolation( double x1,  double y1, double x3, double y3,  double x2);
+
+Compute::Compute(std::string hapfilename,std::string samplefilename, std::string genfilename, bool map_hap_only)
+{
+	haps2vec(hapfilename);
+	sample2vec(samplefilename);
+	checkintegrity();
+	createped(hapfilename);
+
+}
+
 Compute::Compute(std::string hapfilename,std::string samplefilename, std::string genfilename)
 {
 
