@@ -549,11 +549,14 @@ if (IBD && (IBD_THRESHOLD == -1.0))
 //std::cout<<params<<std::endl;
 	//exit(0);
 
+/*
 	if (PEDFILE!="" && MAPFILE!="")
 	{
 
 	}
+*/
 
+/*
 
 	else if (HAPFILE!="" &&  MAPFILE!="" && SAMPLEFILE!=""  )	//if hapfiel and mapfile is provided
 	{
@@ -563,12 +566,12 @@ if (IBD && (IBD_THRESHOLD == -1.0))
 	}
 
 
-/*	else	if (HAPFILE == "" && GENFILE == ""	 && SAMPLEFILE == "")
+	else	if (HAPFILE == "" && GENFILE == ""	 && SAMPLEFILE == "")
 	{
 
-	}*/
-/*	else
-	{*/
+	}
+	else
+	{
 	else if ( !(HAPFILE == "" || GENFILE == ""	 || SAMPLEFILE == "" || PEDFILE!= "" || MAPFILE!="" ))
 	{
 		std::cerr<<" If providing input file in .hap format, must include .hap and .sample file. If providing .ped file, must also include .map file .Program exiting"<<std::endl;
@@ -596,7 +599,42 @@ if (IBD && (IBD_THRESHOLD == -1.0))
 		std::cerr<<"No Input file provided.. Exiting"<<std::endl;
 		exit(0);
 	}
+*/
 
+if (HAPFILE == "" && GENFILE == ""	 && SAMPLEFILE == "")
+{
+
+}
+else
+{
+	if (HAPFILE == "" || GENFILE == ""	 || SAMPLEFILE == "" || PEDFILE!= "" || MAPFILE!="" )
+	{
+		std::cerr<<" If providing input file in .hap format, must include .hap, .gen and .sample file. If providing .ped file, must also include .map file .Program exiting"<<std::endl;
+		exit(0);
+	}
+
+	else
+	{
+		OUTFILE =  HAPFILE.substr(0,HAPFILE.find_last_of("."));
+		Compute compute(HAPFILE, SAMPLEFILE, GENFILE );
+		PEDFILE = HAPFILE.substr(0,HAPFILE.find_last_of("."))+".ped";
+		MAPFILE = HAPFILE.substr(0,HAPFILE.find_last_of("."))+".map";
+	}
+}
+
+
+if (HAPFILE == "" && GENFILE == ""	 && SAMPLEFILE == "" && PEDFILE== "" && MAPFILE=="" )
+{
+	std::cerr<<"No Input file provided.. Exiting"<<std::endl;
+	exit(0);
+}
+if (OUTFILE == "")
+{
+
+	OUTFILE =  PEDFILE.substr(0,PEDFILE.find_last_of("."));
+	//std::cout<<OUTFILE<<std::endl;
+	//exit(0);
+}
 
 
 	if (OUTFILE == "")
