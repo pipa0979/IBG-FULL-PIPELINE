@@ -549,9 +549,13 @@ if (IBD && (IBD_THRESHOLD == -1.0))
 //std::cout<<params<<std::endl;
 	//exit(0);
 
+	if (PEDFILE!="" && MAPFILE!="")
+	{
+
+	}
 
 
-	if (HAPFILE!="" &&  MAPFILE!="" && SAMPLEFILE!=""  )	//if hapfiel and mapfile is provided
+	else if (HAPFILE!="" &&  MAPFILE!="" && SAMPLEFILE!=""  )	//if hapfiel and mapfile is provided
 	{
 		OUTFILE =  HAPFILE.substr(0,HAPFILE.find_last_of("."));
 		Compute compute(HAPFILE, SAMPLEFILE, GENFILE,true );
