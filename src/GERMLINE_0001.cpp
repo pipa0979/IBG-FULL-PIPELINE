@@ -133,8 +133,17 @@ int main(int argc, char* argv[])
 		string temp = argv[i];
 		if (argc == 1)
 		{
-			cerr<<"Error: No inputs provided. Exiting"<<endl;
-			exit(0);
+				cerr<<endl;
+				cerr<<"***********************************************************************************"<<endl;
+				cerr<<"*                        FISHR2 (Genetic Analysis Program)                        *"<<endl;
+				cerr<<"*                                  				                                 *"<<endl;
+				cerr<<"*                (C) 2014  Matthew C. Keller, Doug Bjelland, Piyush Sudip Patel   *"<<endl;
+				cerr<<"*                    Institute for Behavioral Genetics (IBG)                      *"<<endl;
+				cerr<<"*                       University of Colorado at Boulder                         *"<<endl;
+				cerr<<"***********************************************************************************"<<endl;
+				cerr<<"****************************\"./gap -help\" for Usage *****************************"<<endl;
+				cerr<<endl;
+			    exit(0);
 		}
 		if( strcmp(argv[i], "-help") == 0 )
 		{
@@ -939,9 +948,77 @@ bool isInteger(const std::string s)
 
    return (*p == 0) ;
 }
-
-
 void helpShowParameters()
+{
+	cerr<<endl;
+					cerr<<"***********************************************************************************"<<endl;
+					cerr<<"*                        FISHR2 (Genetic Analysis Program)                        *"<<endl;
+					cerr<<"*                                  				                                 *"<<endl;
+					cerr<<"*                (C) 2014  Matthew C. Keller, Doug Bjelland, Piyush Sudip Patel   *"<<endl;
+					cerr<<"*                    Institute for Behavioral Genetics (IBG)                      *"<<endl;
+					cerr<<"*                       University of Colorado at Boulder                         *"<<endl;
+					cerr<<"***********************************************************************************"<<endl;
+					cerr<<endl<<endl<<endl;
+cerr<<"*For sample inputs please refer the README.md file*"<<endl<<endl;
+cerr<< "List of commands:" << endl;
+cerr<<"-pedfile"<<"\n\t-pedfile [pedfile ]"<<endl;
+cerr<<"-mapfile"<<"\n\t-mapfile [mapfile ]"<<endl;
+cerr<<"-geneticmapfile"<<"\n\t-geneticmapfile [geneticmapfile ]"<<endl;
+cerr<<"-samplefile"<<"\n\t-samplefile [samplefile ]"<<endl;
+cerr<<"-hapsfile"<<"\n\t-hapsfile [hapsfile ]"<<endl;
+
+cerr<<"\n***************************************************************\n"<<endl;
+
+cerr<<"-silent"<<"\n\tSuppress all output except for warnings and prompts."<<endl;
+cerr<<"-bin_out"<<"\n\tOutput in binary format to save space."<<endl;
+cerr<<"-min_cm_initial"<<"\n\tMinimum length for match to be used for imputation (in cM or MB)."<<endl;
+cerr<<"-err_hom"<<"\n\tMaximum number of mismatching homozygous markers (per slice)."<<endl;
+cerr<<"-err_het"<<"\n\tMaximum number of mismatching heterozygous markers (per slice)."<<endl;
+cerr<<"-from_snp"<<"\n\tStart SNP (rsID)."<<endl;
+cerr<<"-to_snp"<<"\n\tEnd SNP (rsID)."<<endl;
+cerr<<"-map"<<"\n\tGenetic distance map."<<endl;
+cerr<<"-bits"<<"\n\tSlice size."<<endl;
+cerr<<"-homoz"<<"\n\tAllow self matches (homozygosity)."<<endl;
+cerr<<"-homoz-only"<<"\n\tLook for autozygous/homozygous segments only, does not detect IBD."<<endl;
+cerr<<"-haploid"<<"\n\tTreat input individual as two fully phased chromosomes with no recombination\n\t\toutput IDs with 0/1 suffix for chromosome destinction."<<endl;
+cerr<<"-h_extend"<<"\n\tExtend from seeds if *haplotypes* match."<<endl;
+cerr<<"-w_extend"<<"\n\tExtend, one marker at a time, beyond the boundaries of a found match."<<endl;
+cerr<<"-reduced"<<"\n\tOutput only reduced elements."<<endl;
+cerr<<"-no_suffix"<<"\n\tUse with -haploid to output the cell with no .0 or .1 suffix."<<endl;
+cerr<<"-err_w"<<"\n\tUse with -wextend to allow error matches like 1,2,3 etc in extending"<<endl;
+cerr<<"-hapsfile"<<"\n\tIf using hap file, use this flag. usuage: -hapsfile <hapfilename.hap>  Must also supply \".samplefile\" and \".mapfile\" file using flags -samplefile and -mapfile"<<endl;
+cerr<<"-samplefile"<<"\n\tIf using hapsfile, use this flag for the corresponding sample file. usage: -samplefile <samplefilename.sample>  Must also supply \".hapsfile\" and \".mapfile\" file using flags"<<endl;
+//cerr<<"-geneticmapfile"<<"\n\tOutput only reduced elements."<<endl;
+//<<'\t'	<< "-geneticmapfile"	 <<'\t'	 << "if using hap file, use this flag to supply the corresponding gen file. usuage: -geneticmapfile <genfile.gen>  Must also supply \".hap\" and \".sample\" file using flags -hapsfile and -sample"<< endl
+//<<"\n"<<endl
+cerr<<"-window"<<"\n\t-window value[window width to calculate moving averages]"<<endl;
+cerr<<"-ibd2"<<"\n\t-ibd2 <threshold value> \tCompute ibd2 and ibd4"<<endl;
+cerr<<"-log-file"<<"\n\t-log-file [log file name]"<<endl;
+
+
+
+cerr<<"-gap"<<"\n\t[max gap to consolidate two matches]"<<endl;
+cerr<<"-pct-err-threshold"<<"\n\t[max percentage of errors in a match after the trim] OR -emp-pie-threshold"<<endl;
+cerr<<"-ma-threshold"<<"\n\t[specifies percentile to be drawn from trulyIBD data for MA calculations] OR -empirical-ma-threshold"<<endl;
+cerr<<"*"<<"\n\tNote that if both -emp-pie-threshold and empirical-ma-threshold are supplied, then -trueSNP and -trueCM will be ignored"<<endl;
+cerr<<"**"<<"\n\t-output-type [ must provide any of these. it can be"<<endl;
+cerr<<'\t'<<" MovingAverages  or Error1 or Error2 or Error3 or ErrorRandom1 " << endl;
+cerr<<'\t'<<" or ErrorRandom2 or Error3 or ErrorRandom3 or Full "<< endl;
+cerr<<'\t'<<" look at the description about how these works in wiki ]"<< endl;
+cerr<<"***"<<"\n\t(optional) -holdout-ped [new ped file path] -holdout-map [new map file]"<<endl;
+
+cerr<<"-holdout-threshold [threshold to drop a match with new ped file ]"<<endl;
+cerr<<"-holdout-missing [missing value representation in new ped file] "<< endl;
+
+cerr<<'\t'<<"-trueCM [ true match maximum cm length] " << endl;
+cerr<<'\t'<<"-trueSNP [ true match SNP length]"<< endl;
+cerr<<"****\t"<<"-PIE.dist.length [ can be MOL or any cm distance length "<< endl;
+cerr<<'\t'<<" please refer wiki for more details on how to use this option"<< endl;
+cerr<<'\t'<<"-count.gap.errors [ TRUE or FALSE to include gap errors in errors count ]"<< endl;
+	exit(0);
+}
+
+/*void helpShowParameters()
 {
 	cerr<< "flags:" << endl
 			<< " -pedfile [ped file ]" << endl
@@ -992,6 +1069,6 @@ void helpShowParameters()
 			<<'\t'<<"-count.gap.errors [ TRUE or FALSE to include gap errors in errors count ]"<< endl
 			<<'\t'<<"-ibd2 <threshold value>" <<"\t compute ibd2 and ibd4"<< endl;
 	exit(0);
-}
+}*/
 
 // end GERMLINE_0001.cpp
