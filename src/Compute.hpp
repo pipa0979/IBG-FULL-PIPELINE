@@ -28,7 +28,7 @@ private:
 public:
 
 	Compute(std::string hapfilename,std::string samplefilename, std::string genfilename);
-	Compute(std::string hapfilename,std::string samplefilename, std::string genfilename,bool map_hap_only);
+	Compute(std::string hapfilename,std::string samplefilename);
 	void haps2vec(std::string hapfilename);
 	void sample2vec(std::string samplefilename);
 	void gen2vec(std::string genfilename);

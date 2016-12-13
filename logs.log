@@ -31,12 +31,12 @@ empirical pie threshold is : 0.0149999997
 **********************************************
 
 
-The total number of SH in the input file was: 153
-Number of Consolidations: 4
-Number of matches removed due to initial length: 0
-No of matches removed due to length of trimming by moving averages: 80
+The total number of SH in the input file was: 4128
+Number of Consolidations: 37
+Number of matches removed due to initial length: 1963
+No of matches removed due to length of trimming by moving averages: 2058
 No of matches removed due to percentage error: 0
-Total number of SH that were not dropped is: 69
+Total number of SH that were not dropped is: 70
 
 
- The program started at: Thu Dec  8 16:47:34 2016         The program ended at: Thu Dec  8 16:47:34 2016           Total time ( in seconds): 0
+ The program started at: Mon Dec 12 14:52:50 2016         The program ended at: Mon Dec 12 14:52:50 2016           Total time ( in seconds): 0

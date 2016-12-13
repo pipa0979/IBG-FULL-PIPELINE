@@ -374,47 +374,45 @@ exit(0);
 
 for (int i = 0; i < argc ; i++)
 	{
-	if ((strcmp(argv[i],"-low_ram")==0))
+
+		if ((strcmp(argv[i],"-low_ram")==0))
+			{
+				lowramflag = 1;
+			}
+
+	if (i==0)
+		{
+			fishrcopy[fishrcopycount] = new char[strlen(argv[i])+1];	strcpy(fishrcopy[fishrcopycount],argv[i]);	fishrcopycount++;
+		}
+
+
+	if (grade_list2.count(argv[i]))
 	{
-		lowramflag = 1;
+		//std::cout<<argv[i]<<std::endl;
+		fishrcopy[fishrcopycount] = new char[strlen(argv[i])+1];	strcpy(fishrcopy[fishrcopycount],argv[i]);	fishrcopycount++;
+
+	  if (	(strcmp(argv[i],"-extendSNP")==0) || (strcmp(argv[i],"-bmatch")==0) || (strcmp(argv[i],"-bmid")==0) ||
+			(strcmp(argv[i],"-bsid")==0) || (strcmp(argv[i],"-ped-file")==0) || (strcmp(argv[i],"-holdout-ped")==0)	||
+			(strcmp(argv[i],"-holdout-map")==0) || (strcmp(argv[i],"-window")==0) || (strcmp(argv[i],"-holdout-threshold")==0) ||
+			(strcmp(argv[i],"-trueCM")==0) || ( strcmp( argv[i],"-trueSNP" )==0) || (strcmp(argv[i],"-holdout-missing")==0) ||
+			(strcmp(argv[i],"-gap")==0) || (strcmp(argv[i],"-ma-snp")==0) || (strcmp(argv[i],"-pct-err-threshold")==0) ||
+			(strcmp(argv[i],"-emp-pie-threshold")==0) || (strcmp(argv[i],"-output-type")==0) || (strcmp(argv[i], "-snpfile") ==0) ||
+			(strcmp(argv[i],"-log-file")==0) || (strcmp(argv[i],"-ma-threshold")==0) ||(strcmp(argv[i],"-empirical-ma-threshold")==0 ) ||
+			(strcmp(argv[i],"-PIE.dist.length")==0) || (strcmp(argv[i],"-count.gap.errors")==0 ) ||  (strcmp(argv[i],"-min_cm_final")==0  ) ||
+			(strcmp(argv[i],"-min_snp")==0))
+				  {
+					  i++;
+					  //std::cout<<argv[i]<<std::endl;
+					  //fishrcopy[i] = new char[strlen(argv[i])+1];	strcpy(fishrcopy[i],argv[i]);	fishrcopycount++;
+					  fishrcopy[fishrcopycount] = new char[strlen(argv[i])+1];	strcpy(fishrcopy[fishrcopycount],argv[i]);	fishrcopycount++;
+
+				  }
 	}
-
-if (i==0)
-{
-	fishrcopy[fishrcopycount] = new char[strlen(argv[i])+1];	strcpy(fishrcopy[fishrcopycount],argv[i]);	fishrcopycount++;
-}
-
-
-if (grade_list2.count(argv[i]))
-{
-	//std::cout<<argv[i]<<std::endl;
-
-
-
-	fishrcopy[fishrcopycount] = new char[strlen(argv[i])+1];	strcpy(fishrcopy[fishrcopycount],argv[i]);	fishrcopycount++;
-
-  if (	(strcmp(argv[i],"-extendSNP")==0) || (strcmp(argv[i],"-bmatch")==0) || (strcmp(argv[i],"-bmid")==0) ||
-		(strcmp(argv[i],"-bsid")==0) || (strcmp(argv[i],"-ped-file")==0) || (strcmp(argv[i],"-holdout-ped")==0)	||
-		(strcmp(argv[i],"-holdout-map")==0) || (strcmp(argv[i],"-window")==0) || (strcmp(argv[i],"-holdout-threshold")==0) ||
-		(strcmp(argv[i],"-trueCM")==0) || ( strcmp( argv[i],"-trueSNP" )==0) || (strcmp(argv[i],"-holdout-missing")==0) ||
-		(strcmp(argv[i],"-gap")==0) || (strcmp(argv[i],"-ma-snp")==0) || (strcmp(argv[i],"-pct-err-threshold")==0) ||
-		(strcmp(argv[i],"-emp-pie-threshold")==0) || (strcmp(argv[i],"-output-type")==0) || (strcmp(argv[i], "-snpfile") ==0) ||
-		(strcmp(argv[i],"-log-file")==0) || (strcmp(argv[i],"-ma-threshold")==0) ||(strcmp(argv[i],"-empirical-ma-threshold")==0 ) ||
-		(strcmp(argv[i],"-PIE.dist.length")==0) || (strcmp(argv[i],"-count.gap.errors")==0 ) ||  (strcmp(argv[i],"-min_cm_final")==0  ) ||
-		(strcmp(argv[i],"-min_snp")==0))
-			  {
-				  i++;
-				  //std::cout<<argv[i]<<std::endl;
-				  //fishrcopy[i] = new char[strlen(argv[i])+1];	strcpy(fishrcopy[i],argv[i]);	fishrcopycount++;
-				  fishrcopy[fishrcopycount] = new char[strlen(argv[i])+1];	strcpy(fishrcopy[fishrcopycount],argv[i]);	fishrcopycount++;
-
-			  }
-}
-else
-{
-	//fishrcopy[i] = new char[strlen(argv[i])+1];	strcpy(fishrcopy[i]," ");	fishrcopycount++;
-	continue;
-}
+	else
+	{
+		//fishrcopy[i] = new char[strlen(argv[i])+1];	strcpy(fishrcopy[i]," ");	fishrcopycount++;
+		continue;
+	}
 }
 //exit(0);
 
@@ -600,9 +598,13 @@ if (IBD && (IBD_THRESHOLD == -1.0))
 		exit(0);
 	}
 */
+bool input = false; // (HAPFILE,GENFILE,SAMPLEFILE) or (HAPFILE, MAPFILE) or (PEDFILE, MAPFILE)
 
+
+/*
 if (HAPFILE == "" && GENFILE == ""	 && SAMPLEFILE == "")
 {
+
 
 }
 else
@@ -621,6 +623,13 @@ else
 		MAPFILE = HAPFILE.substr(0,HAPFILE.find_last_of("."))+".map";
 	}
 }
+*/
+
+
+
+
+
+
 
 
 if (HAPFILE == "" && GENFILE == ""	 && SAMPLEFILE == "" && PEDFILE== "" && MAPFILE=="" )
@@ -628,6 +637,39 @@ if (HAPFILE == "" && GENFILE == ""	 && SAMPLEFILE == "" && PEDFILE== "" && MAPFI
 	std::cerr<<"No Input file provided.. Exiting"<<std::endl;
 	exit(0);
 }
+
+if (HAPFILE!="" && MAPFILE!="" && SAMPLEFILE!="")
+{
+	OUTFILE =  HAPFILE.substr(0,HAPFILE.find_last_of("."));
+	Compute compute(HAPFILE, SAMPLEFILE );
+	PEDFILE = HAPFILE.substr(0,HAPFILE.find_last_of("."))+".ped";
+
+}
+else if (HAPFILE!="" && SAMPLEFILE!="" && GENFILE!="")
+{
+	OUTFILE =  HAPFILE.substr(0,HAPFILE.find_last_of("."));
+	Compute compute(HAPFILE, SAMPLEFILE, GENFILE );
+	PEDFILE = HAPFILE.substr(0,HAPFILE.find_last_of("."))+".ped";
+	MAPFILE = HAPFILE.substr(0,HAPFILE.find_last_of("."))+".map";
+
+}
+else
+{
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 if (OUTFILE == "")
 {
 
