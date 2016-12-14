@@ -1012,49 +1012,53 @@ void ErrorCalculator::finalOutPut(int pers1,int pers2,int snp1,int snp2, float m
 
              else
          {
-          std::cout<<sample_id[(pers1*2)+1]<<"\t" //pers1 and pers2 relative person id
+          std::cout<<sample_id[(pers1*2)+1]<<"\t"
           <<sample_id[(pers2*2)+1]<<"\t"
           <<marker_id[snp1].bp_distance<<"\t"
           <<marker_id[snp2].bp_distance<<"\t"
           <<(snp2-snp1)<<"\t"
-          <<(marker_id[snp2].cm_distance-marker_id[snp1].cm_distance)<<"\t";
+          <<(marker_id[snp2].cm_distance-marker_id[snp1].cm_distance)<<"\t"<<"IBD1"<<std::endl;
 
 
-          long SH_L = marker_id[snp1].bp_distance;  //snp1 relative distance i.e. line number of bmid
-          long SH_R = marker_id[snp2].bp_distance;  //snp2 ^^
+          /*long SH_L = marker_id[snp1].bp_distance;  //snp1 relative distance i.e. line number of bmid
+          long SH_R = marker_id[snp2].bp_distance;  //snp2 ^^*/
           std::vector<bool> status;
           status = ma_het(pers1, pers2, snp1, snp2,  min_cm);
 
-          if (status[0] && status[1]) // status 1 stands for ibd4
+/*          if (status[0] && status[1]) // status 1 stands for ibd4
             {
+
               std::cout<<"IBD4"<<std::endl;
               return;
               //check for ibd4
             }
           if (status[0])
             {
-              std::cout<<"IBD2"<<std::endl;
-              return;
-            }
-      /*    else
-            {
-              std::cout<<"NA"<<std::endl;
+              std::cout<<sample_id[(pers1*2)+1]<<"\t"
+              <<sample_id[(pers2*2)+1]<<"\t"
+              <<marker_id[snp1].bp_distance<<"\t"
+              <<marker_id[snp2].bp_distance<<"\t"
+              <<(snp2-snp1)<<"\t"
+              <<(marker_id[snp2].cm_distance-marker_id[snp1].cm_distance)<<"\t"<<"IBD2"<<std::endl;
+                return;
             }*/
+
 
           if ((status[0] == false)&&(status[1] == false)  )
             {
               status.clear();
               bool status;
               status = ma_het_nm(pers1, pers2, snp1, snp2,  min_cm);
-              if (status)
+              /*if (status)
               {
-                std::cout<<"IBD2"<<std::endl;
-              }
-              else
-              {
-                std::cout<<"IBD1"<<endl;
-                return;
-              }
+                std::cout<<sample_id[(pers1*2)+1]<<"\t"
+                <<sample_id[(pers2*2)+1]<<"\t"
+                <<marker_id[snp1].bp_distance<<"\t"
+                <<marker_id[snp2].bp_distance<<"\t"
+                <<(snp2-snp1)<<"\t"
+                <<(marker_id[snp2].cm_distance-marker_id[snp1].cm_distance)<<"\t"<<"IBD2"<<std::endl;
+              }*/
+
             }
          }
 }
@@ -1070,10 +1074,19 @@ bool ErrorCalculator::ma_het_nm(int pers1,int pers2,int snp1,int snp2, float min
 
   if (indices[2]< min_c )
   {
-    return false;
+    //do nothing
+    //return false;
   }
   else
   {
+    std::cout<<sample_id[(pers1*2)+1]<<"\t"
+    <<sample_id[(pers2*2)+1]<<"\t"
+    <<marker_id[indices[0]].bp_distance<<"\t"
+    <<marker_id[indices[1]].bp_distance<<"\t"
+    <<(indices[1]-indices[0])<<"\t"
+    <<indices[2]<<"\t"<<"IBD2"<<std::endl;
+
+    //print it
     return true;
   }
 
@@ -1094,15 +1107,70 @@ std::vector<bool> ErrorCalculator::ma_het(int pers1,int pers2,int snp1,int snp2,
   std::vector <double> indices2 = returnhighest_het(pers2dnasnp1,pers2dnasnp2,snp1,snp2); // ^^
 
   std::vector<bool> status; // 2 values. 0 contains information about,  if ibd2 <withoutNM>, is true or false and  1 contains information about ibd4 is true or false
+  //std::vector<double> status; // 2 values. 0 contains information about,  if ibd2 <withoutNM>, is true or false and  1 contains information about ibd4 is true or false
 
   //std::cerr<<indices1[2]<<std::endl;
 
   if (max(indices1[2],indices2[2]) >= IBD_THRESHOLD )
     {
       status.push_back(true);
+      if ( indices1[2]>=indices2[2]    )
+        {
+          std::cout<<sample_id[(pers1*2)+1]<<"\t"
+          <<sample_id[(pers2*2)+1]<<"\t"
+          <<marker_id[indices1[0]].bp_distance<<"\t"
+          <<marker_id[indices1[1]].bp_distance<<"\t"
+          <<(indices1[1]-indices1[0])<<"\t"
+          <<indices1[2]<<"\t"<<"IBD2"<<std::endl;
+        }
+      else
+        {
+          std::cout<<sample_id[(pers1*2)+1]<<"\t"
+          <<sample_id[(pers2*2)+1]<<"\t"
+          <<marker_id[indices2[0]].bp_distance<<"\t"
+          <<marker_id[indices2[1]].bp_distance<<"\t"
+          <<(indices2[1]-indices2[0])<<"\t"
+          <<indices2[2]<<"\t"<<"IBD2"<<std::endl;
+        }
+
+
+
       if (min(indices1[2],indices2[2]) >= IBD_THRESHOLD )
         {
           status.push_back(true);
+          if ( indices1[2]>=indices2[2]    )
+            {
+              std::cout<<sample_id[(pers1*2)+1]<<"\t"
+              <<sample_id[(pers2*2)+1]<<"\t"
+              <<marker_id[indices2[0]].bp_distance<<"\t"
+              <<marker_id[indices2[1]].bp_distance<<"\t"
+              <<(indices2[1]-indices2[0])<<"\t"
+              <<indices2[2]<<"\t"<<"IBD4"<<std::endl;
+
+              std::cout<<sample_id[(pers1*2)+1]<<"\t"
+              <<sample_id[(pers2*2)+1]<<"\t"
+              <<marker_id[indices2[0]].bp_distance<<"\t"
+              <<marker_id[indices2[1]].bp_distance<<"\t"
+              <<(indices2[1]-indices2[0])<<"\t"
+              <<indices2[2]<<"\t"<<"IBD4"<<std::endl;
+            }
+          else
+            {
+              std::cout<<sample_id[(pers1*2)+1]<<"\t"
+              <<sample_id[(pers2*2)+1]<<"\t"
+              <<marker_id[indices1[0]].bp_distance<<"\t"
+              <<marker_id[indices1[1]].bp_distance<<"\t"
+              <<(indices1[1]-indices1[0])<<"\t"
+              <<indices1[2]<<"\t"<<"IBD4"<<std::endl;
+
+              std::cout<<sample_id[(pers1*2)+1]<<"\t"
+              <<sample_id[(pers2*2)+1]<<"\t"
+              <<marker_id[indices1[0]].bp_distance<<"\t"
+              <<marker_id[indices1[1]].bp_distance<<"\t"
+              <<(indices1[1]-indices1[0])<<"\t"
+              <<indices1[2]<<"\t"<<"IBD4"<<std::endl;
+            }
+
         }
       else
         {
