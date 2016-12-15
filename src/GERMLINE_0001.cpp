@@ -27,6 +27,8 @@ bool BINARY_OUT = false;
 int MAX_ERR_HOM = 4;
 int MAX_ERR_HET = 1;
 int ERR_W=0;
+int IBD2_4_COUNT = 0; // used in FISHR
+int TOTAL_IBD1_COUNT =0;
 bool NO_SUFFIX=false;
 bool REDUCE=false;
 bool GERMLINE_OUTPUT = false;
@@ -985,9 +987,9 @@ cerr<<"-homoz-only"<<"\n\tLook for autozygous/homozygous segments only, does not
 cerr<<"-haploid"<<"\n\tTreat input individual as two fully phased chromosomes with no recombination\n\t\toutput IDs with 0/1 suffix for chromosome destinction."<<endl;
 cerr<<"-h_extend"<<"\n\tExtend from seeds if *haplotypes* match."<<endl;
 cerr<<"-w_extend"<<"\n\tExtend, one marker at a time, beyond the boundaries of a found match."<<endl;
-cerr<<"-reduced"<<"\n\tOutput only reduced elements."<<endl;
+//cerr<<"-reduced"<<"\n\tOutput only reduced elements."<<endl;
 cerr<<"-no_suffix"<<"\n\tUse with -haploid to output the cell with no .0 or .1 suffix."<<endl;
-cerr<<"-err_w"<<"\n\tUse with -wextend to allow error matches like 1,2,3 etc in extending"<<endl;
+//cerr<<"-err_w"<<"\n\tUse with -wextend to allow error matches like 1,2,3 etc in extending"<<endl;
 cerr<<"-hapsfile"<<"\n\tIf using hap file, use this flag. usuage: -hapsfile <hapfilename.hap>  Must also supply \".samplefile\" and \".mapfile\" file using flags -samplefile and -mapfile"<<endl;
 cerr<<"-samplefile"<<"\n\tIf using hapsfile, use this flag for the corresponding sample file. usage: -samplefile <samplefilename.sample>  Must also supply \".hapsfile\" and \".mapfile\" file using flags"<<endl;
 //cerr<<"-geneticmapfile"<<"\n\tOutput only reduced elements."<<endl;

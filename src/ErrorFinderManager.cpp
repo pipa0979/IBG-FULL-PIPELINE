@@ -45,6 +45,7 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
 	        std::cerr << "Error reading current directory" << std::endl;
 		return;
        }
+
        for(int i=1;i<argc;i++)
         {
     	  // std::cout<<argv[i]<<std::endl;
@@ -301,6 +302,12 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
 		//cerr <<"DEBUG: EXITING CONSOLIDATOR FINAL OUTPUT" << endl;
            }
         }
+
+      	 if (IBD)
+      	 {
+      		 std::string ibd_sh = "Total number of SH that were not dropped is: "+NumberToString(TOTAL_IBD1_COUNT+IBD2_4_COUNT);
+      		 eCalculator.log(ibd_sh);
+      	 }
         time_t endTime;
         time (&endTime);
         /*Provide the log file with information about start and end times*/
@@ -316,7 +323,8 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
          //add start time
          str2 = "\n\n" + str1 + "        " + str2;
          //eCalculator.log( str1 );
-          eCalculator.log( str2 );
+
+         eCalculator.log( str2 );
 
 }
 void ErrorFinderManager::displayError(std::string argv)
