@@ -4,7 +4,6 @@ This is the newest version of FISHR which detects IBD segments between individua
 #For a For a complete worked through example, see  the following R Script:
 FISHR2.complete.example.R
 
-
 # FISHR2
 
 This is the newest version of the FISHR (Find IBD Shared Haplotypes Rapidly) program. Major changes from V1:
