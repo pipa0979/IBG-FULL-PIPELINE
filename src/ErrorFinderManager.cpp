@@ -156,16 +156,16 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
                 }
 		else if(strcmp(argv[i],"-ma-threshold")==0&&i<argc-1)//adding new -ma-threshold argument
 		{
-		     if(thresholdError == true){ //user has already supplied an empirical-ma-threshold, so exit the program with an error message
-		    	 std::cerr << "ERROR: You have supplied both -empirical-ma-threshold and -ma-threshold parameters, but only one is allowed. Exiting program."<< std::endl;
+		     if(thresholdError == true){ //user has already supplied an emp-ma-threshold, so exit the program with an error message
+		    	 std::cerr << "ERROR: You have supplied both -emp-ma-threshold and -ma-threshold parameters, but only one is allowed. Exiting program."<< std::endl;
                         exit(1);
 		     }
 		     MA_THRESHOLD=atof(argv[++i]);
 		     thresholdError = true;
 		}
-		else if(strcmp(argv[i],"-empirical-ma-threshold")==0 && i<argc-1){
+		else if(strcmp(argv[i],"-emp-ma-threshold")==0 && i<argc-1){
 		     if(thresholdError == true){
-		    	 std::cerr << "ERROR: You have supplied both -empirical-ma-threshold and -ma-threshold parameters, but only one is allowed. Exiting program."<< std::endl;
+		    	 std::cerr << "ERROR: You have supplied both -emp-ma-threshold and -ma-threshold parameters, but only one is allowed. Exiting program."<< std::endl;
 			exit(1);
 		     }
 		     EMPIRICAL_MA_RESULT = atof(argv[++i]); //use the user supplied empirical ma threshold, instead of calculating it via true ibd segments
@@ -253,10 +253,10 @@ void ErrorFinderManager::performConsolidation(int argc,char *argv[])
                     }
                     if(EMPIRICAL_MA_RESULT < 0.0){
                       str += "\nuser supplied ma threshold: " + NumberToString(MA_THRESHOLD) +
-                      "\nuser did not supply an empirical-ma-threshold: NA";
+                      "\nuser did not supply an emp-ma-threshold: NA";
                     }else{
                       str += "\nuser did not supply an ma-threshold: NA";
-                      str += "\nuser supplied empirical-ma-threshold: " + NumberToString(EMPIRICAL_MA_RESULT);
+                      str += "\nuser supplied emp-ma-threshold: " + NumberToString(EMPIRICAL_MA_RESULT);
                     }
                     "\n****************************************************\n";
 
@@ -334,9 +334,9 @@ void ErrorFinderManager::displayError(std::string argv)
              <<" -ped-file [ped file] -window [window width to calculate moving averages] "
              <<" -gap [max gap to consolidate two matches]"
                <<" -pct-err-threshold [max percentage of errors in a match after the trim] OR -emp-pie-threshold" 
-               <<" -ma-threshold [specifies percentile to be drawn from trulyIBD data for MA calculations] OR -empirical-ma-threshold"
-               <<" Note that if both -emp-pie-threshold and empirical-ma-threshold are supplied, then -trueSNP and -trueCM will be ignored"
-              <<"-output.type [ must provide any of these. it can be "
+               <<" -ma-threshold [specifies percentile to be drawn from trulyIBD data for MA calculations] OR -emp-ma-threshold"
+               <<" Note that if both -emp-pie-threshold and emp-ma-threshold are supplied, then -trueSNP and -trueCM will be ignored"
+              <<"-output-type [ must provide any of these. it can be "
                << "MovingAverages  or Error1 or Error2 or Error3 or ErrorRandom1 " 
                 << "or ErrorRandom2 or Error3 or ErrorRandom3 or Full "
                 <<  "look at the description about how these works in wiki ]"

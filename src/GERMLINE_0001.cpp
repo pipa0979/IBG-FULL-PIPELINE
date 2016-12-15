@@ -112,7 +112,8 @@ int main(int argc, char* argv[])
 	grade_list2["-snpfile"] = "NULL";
 	grade_list2["-log-file"] = "NULL";
 	grade_list2["-ma-threshold"] = "NULL";
-	grade_list2["-empirical-ma-threshold"] = "NULL";
+	//grade_list2["-empirical-ma-threshold"] = "NULL";
+	grade_list2["-emp-ma-threshold"] = "NULL";
 	grade_list2["-PIE.dist.length"] = "NULL";
 	grade_list2["-count.gap.errors"] = "NULL";
 	bool help = false;
@@ -409,7 +410,7 @@ for (int i = 0; i < argc ; i++)
 			(strcmp(argv[i],"-trueCM")==0) || ( strcmp( argv[i],"-trueSNP" )==0) || (strcmp(argv[i],"-holdout-missing")==0) ||
 			(strcmp(argv[i],"-gap")==0) || (strcmp(argv[i],"-ma-snp")==0) || (strcmp(argv[i],"-pct-err-threshold")==0) ||
 			(strcmp(argv[i],"-emp-pie-threshold")==0) || (strcmp(argv[i],"-output-type")==0) || (strcmp(argv[i], "-snpfile") ==0) ||
-			(strcmp(argv[i],"-log-file")==0) || (strcmp(argv[i],"-ma-threshold")==0) ||(strcmp(argv[i],"-empirical-ma-threshold")==0 ) ||
+			(strcmp(argv[i],"-log-file")==0) || (strcmp(argv[i],"-ma-threshold")==0) ||(strcmp(argv[i],"-emp-ma-threshold")==0 ) ||
 			(strcmp(argv[i],"-PIE.dist.length")==0) || (strcmp(argv[i],"-count.gap.errors")==0 ) ||  (strcmp(argv[i],"-min_cm_final")==0  ) ||
 			(strcmp(argv[i],"-min_snp")==0))
 				  {
@@ -1002,9 +1003,9 @@ cerr<<"-log-file"<<"\n\t-log-file [log file name]"<<endl;
 
 
 cerr<<"-gap"<<"\n\t[max gap to consolidate two matches]"<<endl;
-cerr<<"-pct-err-threshold"<<"\n\t[max percentage of errors in a match after the trim] OR -emp-pie-threshold"<<endl;
-cerr<<"-ma-threshold"<<"\n\t[specifies percentile to be drawn from trulyIBD data for MA calculations] OR -empirical-ma-threshold"<<endl;
-cerr<<"*"<<"\n\tNote that if both -emp-pie-threshold and empirical-ma-threshold are supplied, then -trueSNP and -trueCM will be ignored"<<endl;
+cerr<<"-emp-pie-threshold"<<"\n\t[max percentage of errors in a match after the trim] OR -pct-err-threshold"<<endl;
+cerr<<"-emp-ma-threshold"<<"\n\t[specifies percentile to be drawn from trulyIBD data for MA calculations] OR -ma-threshold "<<endl;
+cerr<<"*"<<"\n\tNote that if both -emp-pie-threshold and emp-ma-threshold are supplied, then -trueSNP and -trueCM will be ignored"<<endl;
 cerr<<"**"<<"\n\t-output-type [ must provide any of these. it can be"<<endl;
 cerr<<'\t'<<" MovingAverages  or Error1 or Error2 or Error3 or ErrorRandom1 " << endl;
 cerr<<'\t'<<" or ErrorRandom2 or Error3 or ErrorRandom3 or Full "<< endl;
